@@ -1,4 +1,4 @@
-#!
+#!pythonss
 import sys
 """Version Checker"""
 if sys.version_info < (3, 0, 0):
