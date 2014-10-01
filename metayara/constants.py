@@ -1,0 +1,1 @@
+PLUGINPATH = 'metayara/plugins/'
