@@ -1,17 +1,20 @@
 import struct
 from metayara.metatag import TAGS
 
-class PEScan():
+class pescan():
     """
     >> PE Field header scan
     """
-    PE_List = []
-    
     
     def __init__(self, handle):
+        self.PE_List = []
         self.handle = handle
         self.pe_machine(handle)
-                
+               
+               
+    def __repr__(self):
+        return repr([self.PE_List]) 
+    
     def pe_machine(self, handle):
         
         handle.seek(60, 0)

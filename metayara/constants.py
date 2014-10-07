@@ -1,1 +1,1 @@
-PLUGINPATH = 'metayara/plugins/'
+pluginpath = 'metayara/plugins/'
