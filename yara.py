@@ -1,3 +1,4 @@
+#!None
 import sys
 
 if sys.version_info < (3, 0, 0):
@@ -13,20 +14,19 @@ import modulefinder
 
 sys.stderr.write("Metayara Scanning Platform\n\n")
 
-
 def plugin_description():
     
     regex = re.compile(">>.+")
     pluginlist = []
     plugindescription = {}
     
-    for item in os.listdir(path=PLUGINPATH):
+    for item in os.listdir(path=pluginpath):
         if item.endswith(".py"):
             pluginlist.append(item)
     
     for plugin in pluginlist:
 
-        file = open(PLUGINPATH + plugin, 'r')
+        file = open(pluginpath + plugin, 'r')
         
         for line in file:
 
@@ -44,7 +44,6 @@ def Process(cmd, filename):
     print(cmd)
     print(filename)
     """Open File buffer"""
-    
     try:
         handle = open(filename, 'rb')
         
@@ -63,7 +62,6 @@ def Process(cmd, filename):
     print(data)
             
 def main():
-    
     parser = optparse.OptionParser(usage="usage: %prog run [options] filename")
     parser.add_option("-f", "--filename", dest="filename", action="store", type="string",
                       help="filename to be used")
@@ -80,13 +78,16 @@ def main():
         for value in plugins:
             print("{0:<10} - {1}".format(value, plugins[value]))
                           
-    if opts.filename:
-        
+    if opts.filename is not None:
         if not os.path.exists(opts.filename):
             print("File does not exist")
             sys.exit(1)
+        else:
+             Process(opts.command, opts.filename)
+    else:
+        print("No file input")
             
-    Process(opts.command, opts.filename)
+   
 if __name__ == "__main__": 
     try:
         main()
