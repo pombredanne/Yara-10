@@ -40,6 +40,18 @@ def plugin_description():
                
     return plugindescription
 
+def Output_data(dictionary): 
+    """
+    maxsize = max(map(len, dictionary))
+    
+    for line in dictionary:
+        print("{0:<{1}} -  {2}".format(line, maxsize, dictionary[line]))
+        """
+    for name, integer, key, val, hey in dictionary:
+        if name == "Magic;":
+            print("\n")
+        print("{0:30} {1:7} {2:10} {3:3} {4}".format(name, integer, key, val, hey))
+        
 def Process(cmd, filename):
     print(cmd)
     print(filename)
@@ -53,13 +65,16 @@ def Process(cmd, filename):
     for name in os.listdir(pluginpath):
         if cmd in name:
             setdir = (pluginpath + name)
-        
+    
+    dict_items = []
     loader = importlib.machinery.SourceFileLoader(cmd, setdir)
     foo = loader.load_module()
     obj = getattr(foo, cmd)
-    data = obj(handle)
+    data = obj(handle, dict_items)
     
-    print(data)
+    Output_data(dict_items)
+    
+    
             
 def main():
     parser = optparse.OptionParser(usage="usage: %prog run [options] filename")
@@ -75,8 +90,10 @@ def main():
     if opts.pluginlist:
         
         plugins = plugin_description()
+        maxsize = max(map(len, plugins))
+        
         for value in plugins:
-            print("{0:<10} - {1}".format(value, plugins[value]))
+            print("{0:<{1}} - {2}".format(value, maxsize, plugins[value]))
                           
     if opts.filename is not None:
         if not os.path.exists(opts.filename):
