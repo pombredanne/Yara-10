@@ -26,7 +26,6 @@ class pescan():
             insert = (name, "int", key, "hex value", hey)
             field_list.append(insert)
         
-            
     def pe_image_optinal_header(self, field_list):
         for name, seek, read, pack in _IMAGE_OPTIONAL_HEADER:
             byte = self.byte_handler_pe_file_optional_header(self.handle, seek, read)
