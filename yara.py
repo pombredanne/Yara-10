@@ -40,21 +40,23 @@ def plugin_description():
                
     return plugindescription
 
-def Output_data(dictionary): 
-    """
-    maxsize = max(map(len, dictionary))
+def get_length_dict_place(dictionary, value):
+    pass
     
-    for line in dictionary:
-        print("{0:<{1}} -  {2}".format(line, maxsize, dictionary[line]))
-        """
-    for name, integer, key, val, hey in dictionary:
-        if name == "Magic;":
-            print("\n")
-        print("{0:30} {1:7} {2:10} {3:3} {4}".format(name, integer, key, val, hey))
+def Output_data(container): 
+    """
+    Change printing algoritm later ** 
+    """    
+    maxsize = max(len(str(hexnumber)) for line, integer, intvalue, hexvalue, hexnumber in container)
+    print("Container \n{0:-<100} \n".format('-'))
+    for name, integer, intvalue, hexvalue, hexnumber in container:
         
+        print("{0:60} {1:4} {2:<9} {3:3} {4}".format(name, integer, intvalue, hexvalue, hexnumber))
+    
+
 def Process(cmd, filename):
     print(cmd)
-    print(filename)
+    print(filename, "\n")
     """Open File buffer"""
     try:
         handle = open(filename, 'rb')
@@ -66,13 +68,17 @@ def Process(cmd, filename):
         if cmd in name:
             setdir = (pluginpath + name)
     
-    dict_items = []
+    container = []
     loader = importlib.machinery.SourceFileLoader(cmd, setdir)
     foo = loader.load_module()
     obj = getattr(foo, cmd)
-    data = obj(handle, dict_items)
+    data = obj(handle, container)
     
-    Output_data(dict_items)
+    if len(container) <= 0:
+        sys.stderr.write("Container Empty")
+        sys.exit()
+    else:
+        Output_data(container)
     
     
             
