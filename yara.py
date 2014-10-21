@@ -45,15 +45,31 @@ def get_length_dict_place(dictionary, value):
     
 def Output_data(container): 
     """
-    Change printing algoritm later ** 
-    """    
-    maxsize = max(len(str(hexnumber)) for line, integer, intvalue, hexvalue, hexnumber in container)
-    print("Container \n{0:-<100} \n".format('-'))
-    for name, integer, intvalue, hexvalue, hexnumber in container:
-        
-        print("{0:60} {1:4} {2:<9} {3:3} {4}".format(name, integer, intvalue, hexvalue, hexnumber))
+    Only works for 1 size list for now
+    """ 
+    data = container[0]
+    length_container_header = len(container[0])
+    lenght_container_total = len(container) -1
+    lenght_container_body = len(container[1])
+    print("Container total ", lenght_container_total)
+    print("Container body is", lenght_container_body)
+    print("Container header is", length_container_header, '\n')
     
-
+    header_field = []
+    for field in data[0:length_container_header]:
+        header_field.append(field)
+        
+    """Get Lenghts of Container items per column"""
+    container_lenght_list = [max(map(len, map(str, x))) for x in zip(*container)]
+      
+    fmt = ' '.join('{:<%s}' % l for l in container_lenght_list)
+    print(fmt)
+    print(fmt.format(*container[0]))  # header
+    print('-' * (sum(container_lenght_list) + len(container_lenght_list) - 1)) #divider
+    for argv in container[1:]:
+        print(fmt.format(*argv))
+    
+      
 def Process(cmd, filename):
     print(cmd)
     print(filename, "\n")

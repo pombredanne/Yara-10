@@ -8,8 +8,13 @@ class dosheaderscan():
     
     def __init__(self, handle, DOS_list):
         self.handle = handle
-        self.DOS_list = DOS_list    
+        self.DOS_list = DOS_list  
+        self.set_field_header()  
         self.dos_header_file()
+       
+    def set_field_header(self):
+        setup = ("Field", "Integer", "Hex" ,"OptionalFields")
+        self.DOS_list.append(setup) 
         
     def dos_header_file(self):
         """Returns a list with DOS header fields"""
@@ -18,9 +23,9 @@ class dosheaderscan():
     def dos_image_header(self):
         for name, seek, read, pack in _IMAGE_DOS_HEADER:
             byte = self.byte_handler(self.handle, seek, read)
-            key = struct.unpack(pack, byte)[0]
-            hey = hex(key)
-            insert = (name, "int", key, "hex value", hey)
+            integer = struct.unpack(pack, byte)[0]
+            hexvalue = hex(integer)
+            insert = (name, integer, hexvalue)
             self.DOS_list.append(insert)
     
     def byte_handler(self, handle, seek, read):

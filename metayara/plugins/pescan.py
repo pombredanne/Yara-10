@@ -11,27 +11,32 @@ class pescan():
     def __init__(self, handle, PE_List):
         self.handle = handle
         self.PE_list = PE_List
+        self.set_field_header()
         self.pefile()
         
     def pefile(self):
         """Returns a list with pe header fields"""
         self.pe_image_file_header(self.PE_list)
-        self.pe_image_optinal_header(self.PE_list)
+        self.pe_image_optional_header(self.PE_list)
+    
+    def set_field_header(self):
+        setup = ("Field", "Integer", "Hex" ,"OptionalFields")
+        self.PE_list.append(setup)
             
     def pe_image_file_header(self, field_list):
-        for name, seek, read, pack in _IMAGE_FILE_HEADER:
+        for field, seek, read, pack in _IMAGE_FILE_HEADER:
             byte = self.byte_handler_pe_file_header(self.handle, seek, read)
-            key = struct.unpack(pack, byte)[0]
-            hey = hex(key)
-            insert = (name, "int", key, "hex value", hey)
+            intvalue = struct.unpack(pack, byte)[0]
+            hexvalue = hex(intvalue)
+            insert = (field, intvalue, hexvalue)
             field_list.append(insert)
         
-    def pe_image_optinal_header(self, field_list):
-        for name, seek, read, pack in _IMAGE_OPTIONAL_HEADER:
+    def pe_image_optional_header(self, field_list):
+        for field, seek, read, pack in _IMAGE_OPTIONAL_HEADER:
             byte = self.byte_handler_pe_file_optional_header(self.handle, seek, read)
-            key = struct.unpack(pack, byte)[0]
-            hey = hex(key)
-            insert = (name, "int", key, "hex value", hey)
+            intvalue = struct.unpack(pack, byte)[0]
+            hexvalue = hex(intvalue)
+            insert = (field, intvalue, hexvalue)
             field_list.append(insert)
     
     def get_elfanew_offset(self, handle):
