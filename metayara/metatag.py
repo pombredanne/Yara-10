@@ -101,4 +101,6 @@ _IMAGE_OPTIONAL_HEADER = [('Magic;',                                            
                           ('IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT_TableVirtualAddress;',   0xc8,   0x04, '<L'),
                           ('IMAGE_DIRECTORY_ENTRY_DELAY_IMPORT_Size;',                  0xc8,   0x04, '<L'),
                           ('IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR_TableVirtualAddress;', 0xd0,   0x04, '<L'),
-                          ('IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR_IAT_Size;',            0xd4,   0x04, '<L')]
+                          ('IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR_IAT_Size;',            0xd4,   0x04, '<L'),
+                          ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xd8,   0x04, '<L'),
+                          ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xdc,   0x04, '<L')]

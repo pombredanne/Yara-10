@@ -1,11 +1,11 @@
 import struct
 from metayara.metatag import _IMAGE_DOS_HEADER
+import ctypes
 
-class dosheaderscan():
+class dosscan():
     """
     >> DOS Header scan
     """
-    
     def __init__(self, handle, DOS_list):
         self.handle = handle
         self.DOS_list = DOS_list  
@@ -13,7 +13,7 @@ class dosheaderscan():
         self.dos_header_file()
        
     def set_field_header(self):
-        setup = ("Field", "Integer", "Hex" ,"OptionalFields")
+        setup = ("Field", "Integer", "Hexadecimal" ,"OptionalFields")
         self.DOS_list.append(setup) 
         
     def dos_header_file(self):

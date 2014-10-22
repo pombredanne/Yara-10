@@ -1,6 +1,5 @@
-#!None
+#!Not Set
 import sys
-
 if sys.version_info < (3, 0, 0):
     sys.stderr.write("Requires version 3.0 or higher")
     sys.exit(1)
@@ -10,8 +9,7 @@ import os
 import re
 import importlib.machinery
 from metayara.constants import pluginpath
-import modulefinder
-
+from metayara import utils
 sys.stderr.write("Metayara Scanning Platform\n\n")
 
 def plugin_description():
@@ -39,11 +37,9 @@ def plugin_description():
                 plugindescription[plugin] = match
                
     return plugindescription
-
-def get_length_dict_place(dictionary, value):
-    pass
     
 def Output_data(container): 
+    
     """
     Only works for 1 size list for now
     """ 
@@ -51,28 +47,31 @@ def Output_data(container):
     length_container_header = len(container[0])
     lenght_container_total = len(container) -1
     lenght_container_body = len(container[1])
-    print("Container total ", lenght_container_total)
-    print("Container body is", lenght_container_body)
-    print("Container header is", length_container_header, '\n')
+    
+    """
+    Get Lenghts of Container items per column
+    """
+    container_lenght_list = [max(map(len, map(str, x))) for x in zip(*container)]
     
     header_field = []
     for field in data[0:length_container_header]:
         header_field.append(field)
-        
-    """Get Lenghts of Container items per column"""
-    container_lenght_list = [max(map(len, map(str, x))) for x in zip(*container)]
-      
-    fmt = ' '.join('{:<%s}' % l for l in container_lenght_list)
-    print(fmt)
-    print(fmt.format(*container[0]))  # header
-    print('-' * (sum(container_lenght_list) + len(container_lenght_list) - 1)) #divider
-    for argv in container[1:]:
+          
+    fmt = ' '.join('{:<%s}' %l for l in container_lenght_list)
+    
+    print(fmt.format(*container[0]))  #Header
+    print('-' * (sum(container_lenght_list) + len(container_lenght_list))) #HeaderDivider
+    for argv in container[1:]: #Body
         print(fmt.format(*argv))
     
       
 def Process(cmd, filename):
-    print(cmd)
-    print(filename, "\n")
+    print("Executing command:", cmd, "\n")
+    type = utils.get_type(filename)
+    print("Reading file:", filename)
+    print("MIMEtype    :",  type, "\n")
+    
+
     """Open File buffer"""
     try:
         handle = open(filename, 'rb')
@@ -95,8 +94,6 @@ def Process(cmd, filename):
         sys.exit()
     else:
         Output_data(container)
-    
-    
             
 def main():
     parser = optparse.OptionParser(usage="usage: %prog run [options] filename")
