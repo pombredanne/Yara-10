@@ -1,7 +1,7 @@
 import struct
 from metayara.metatag import TAGS
 from time import gmtime, strftime
-from metayara.metatag import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER
+from metayara.metatag import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, TAG
 import ctypes
 
 class pescan():
@@ -21,16 +21,27 @@ class pescan():
         self.pe_image_optional_header(self.PE_list)
     
     def set_field_header(self):
-        setup = ("Offset", "Field", "Integer Value", "Hex Value")
+        setup = ("Offset", "Field", "Integer Value", "Hex Value", "Optional Field")
         self.PE_list.append(setup)
+        
+    def check_tags(self, field, hexvalue):
+        
+        for item in TAG:
+            if field is item[0]:
+                if hexvalue == hex(item[1]):
+                    return item[2]
+                            
+        optional = '.'
+        return optional
             
     def pe_image_file_header(self, field_list):
         for field, seek, read, pack in _IMAGE_FILE_HEADER:
             byte, realoffset = self.byte_handler_pe_file_header(self.handle, seek, read)
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
+            set_optional_field = self.check_tags(field, hexvalue)
             realoffset = hex(realoffset)
-            insert = (realoffset, field, intvalue, hexvalue)
+            insert = (realoffset, field, intvalue, hexvalue, set_optional_field)
             field_list.append(insert)
         
     def pe_image_optional_header(self, field_list):
@@ -38,8 +49,9 @@ class pescan():
             byte, realoffset = self.byte_handler_pe_file_optional_header(self.handle, seek, read)
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
+            set_optional_field = self.check_tags(field, hexvalue)
             realoffset = hex(realoffset)
-            insert = (realoffset, field, intvalue, hexvalue)
+            insert = (realoffset, field, intvalue, hexvalue, set_optional_field)
             field_list.append(insert)
     
     def get_elfanew_offset(self, handle):

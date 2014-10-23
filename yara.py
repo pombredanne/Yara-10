@@ -10,6 +10,7 @@ import re
 import importlib.machinery
 from metayara.constants import pluginpath
 from metayara import utils
+
 sys.stderr.write("Metayara Scanning Platform\n\n")
 
 def plugin_description():
@@ -96,6 +97,7 @@ def Process(cmd, filename):
         Output_data(container)
             
 def main():
+    
     parser = optparse.OptionParser(usage="usage: %prog run [options] filename")
     parser.add_option("-f", "--filename", dest="filename", action="store", type="string",
                       help="filename to be used")

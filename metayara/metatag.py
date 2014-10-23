@@ -1,6 +1,15 @@
-TAGS = { '0x14c': ('IMAGE_FILE_MACHINE_I386'),
-         '0x0200': ('IMAGE_FILE_MACHINE_IA64'),
-         '0x8664': ('IMAGE_FILE_MACHINE_AMD64')}
+TAGS = { '0x14c'        : ('IMAGE_FILE_MACHINE_I386'),
+         '0x0200'       : ('IMAGE_FILE_MACHINE_IA64'),
+         '0x8664'       : ('IMAGE_FILE_MACHINE_AMD64')}
+
+TAG = [('Machine;',     0x14c,  'IMAGE_FILE_MACHINE_I386'),
+       ('Machine;',     0x0200, 'IMAGE_FILE_MACHINE_IA64'),
+       ('Machine;',     0x8664, 'IMAGE_FILE_MACHINE_AMD64'),
+       ('Subystem;',    1,      'NATIVE'),
+       ('Subsystem;',   2,      'WINDOWS_GUI'),
+       ('Subsystem;',   3,      'WINDOWS_CUI'),
+       ('Subsystem;',   4,      'OS2_CUI'),
+       ('Subsystem;',   5,      'POSIX_CUI')]
 
 _IMAGE_FILE_HEADER = [('Machine;',                 0x04,  0x02, '<H'),
                       ('NumberOfSections;',        0x06,  0x02, '<H'),
