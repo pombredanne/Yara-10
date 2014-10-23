@@ -1,7 +1,3 @@
-TAGS = { '0x14c'        : ('IMAGE_FILE_MACHINE_I386'),
-         '0x0200'       : ('IMAGE_FILE_MACHINE_IA64'),
-         '0x8664'       : ('IMAGE_FILE_MACHINE_AMD64')}
-
 TAG = [('Machine;',     0x14c,  'IMAGE_FILE_MACHINE_I386'),
        ('Machine;',     0x0200, 'IMAGE_FILE_MACHINE_IA64'),
        ('Machine;',     0x8664, 'IMAGE_FILE_MACHINE_AMD64'),
