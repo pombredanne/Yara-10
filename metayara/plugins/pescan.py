@@ -16,6 +16,7 @@ class pescan():
         self.pefile()
     
     def check_if_pe(self):
+        """CHECKS BEFORE RUN"""
         pass
         
     def pefile(self):
@@ -39,17 +40,17 @@ class pescan():
             flag = int(flag)
             
             if flag == True:
-                for i in range(1):
-                    flag_name, flag_description = flag_list[counter]
-                    flag_name = flag_name
-                    flag_description = flag_description
-                    flag_set = "TRUE"
+                
+                flag_name, flag_description = flag_list[counter]
+                flag_name = flag_name
+                flag_description = flag_description
+                flag_set = "TRUE"
             else:
-                for i in range(1):
-                    flag_name, flag_description = flag_list[counter]
-                    flag_name = flag_name
-                    flag_description = flag_description
-                    flag_set = "FALSE"
+                
+                flag_name, flag_description = flag_list[counter]
+                flag_name = flag_name
+                flag_description = flag_description
+                flag_set = "FALSE"
             
             
             insert = ("", "FLAG", flag_name, flag_set,flag_description)
@@ -88,9 +89,6 @@ class pescan():
              
         if set_char_flag is not None:
             self.set_char_flags(set_char_flag, _PE_Characteristics)  
-              
-        
-            
         
     def pe_image_optional_header(self, field_list):
         

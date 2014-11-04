@@ -42,6 +42,11 @@ tag_pe = [('Machine;',             0x14c,       'IMAGE_FILE_MACHINE_I386'       
           ('Magic;',               0x107,      'IMAGE_ROM_OPTIONAL_HDR_MAGIC+'            ),]
        
 
+_DOS_HEADER_INFO = [('e_magic', 0x5A4D,       'MZ'),
+                    ('e_magic', 0x454E,       'NE'),
+                    ('e_magic', 0x454C,       'LE'),
+                    ('e_magic', 0x00004550,   'PE00'),]
+
 _PE_Characteristics = [('IMAGE_FILE_RELOCS_STRIPPED',           'Relocation information was stripped from the file.'), 
                        ('IMAGE_FILE_EXECUTABLE_IMAGE',          'The file is executable'),
                        ('IMAGE_FILE_LINE_NUMS_STRIPPED',        'COFF line numbers stripped'),
@@ -178,3 +183,49 @@ _IMAGE_OPTIONAL_HEADER = [('Magic;',                                            
                           ('IMAGE_DIRECTORY_ENTRY_COM_DESCRIPTOR_IAT_Size;',            0xd4,   0x04, '<L'),
                           ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xd8,   0x04, '<L'),
                           ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xdc,   0x04, '<L')]
+
+_SECTION_HEADER = [   ('Name;',                     0,   8,     '<BBBBBBBB'),
+                      ('VirtualSize;',              8,   4,     '<L'),
+                      ('VirtualAddress;',           12,  4,     '<L'),
+                      ('SizeOfRawData;',            16,  4,     '<L'),
+                      ('PointerToRawData;',         20,  0x04,  '<L'),
+                      ('PointerToRelocations;',     24,  4,     '<L'),
+                      ('PointerToLinenumbers;',     28,  4,     '<L'),
+                      ('NumberOfRelocations;',      32,  2,     '<H'),
+                      ('NumberOfLinenumbers;',      34,  2,     '<H'),
+                      ('Characteristics;',          36,  4,     '<L')]
+
+_SECTION_FLAG = [('IMAGE_SCN_TYPE_DSECT'),
+                 ('MAGE_SCN_TYPE_NOLOAD'),
+                 ('IMAGE_SCN_TYPE_GROUP'),
+                 ('IMAGE_SCN_TYPE_NO_PAD'),
+                 ('IMAGE_SCN_TYPE_COPY'),
+                 ('IMAGE_SCN_CNT_CODE'),
+                 ('IMAGE_SCN_CNT_INITIALIZED_DATA'),
+                 ('IMAGE_SCN_CNT_UNINITIALIZED_DATA'),
+                 ('IMAGE_SCN_LNK_OTHER'),
+                 ('IMAGE_SCN_LNK_INFO'),
+                 ('IMAGE_SCN_TYPE_OVER'),
+                 ('IMAGE_SCN_LNK_REMOVE'),
+                 ('IMAGE_SCN_LNK_COMDAT'),
+                 ('RESERVED'),
+                 ('RESERVED'),
+                 ('IMAGE_SCN_MEM_FARDATA'),
+                 ('RESERVED'),
+                 ('IMAGE_SCN_MEM_PURGEABLE'),
+                 ('IMAGE_SCN_MEM_LOCKED'),
+                 ('IMAGE_SCN_MEM_PRELOAD'),
+                 
+                 ('ALIGNMENTSECTION'),
+                 ('ALIGNMENTSECTION'),
+                 ('ALIGNMENTSECTION'),
+                 ('ALIGNMENTSECTION'),
+                 
+                 ('IMAGE_SCN_LNK_NRELOC_OVFL'),
+                 ('IMAGE_SCN_MEM_DISCARDABLE'),
+                 ('IMAGE_SCN_MEM_NOT_CACHED'),
+                 ('IMAGE_SCN_MEM_NOT_PAGED'),
+                 ('IMAGE_SCN_MEM_SHARED'),
+                 ('IMAGE_SCN_MEM_EXECUTE'),
+                 ('IMAGE_SCN_MEM_READ'),
+                 ('IMAGE_SCN_MEM_WRITE')]
