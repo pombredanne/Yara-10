@@ -1,5 +1,6 @@
 import struct
 from metayara.metatag import _SECTION_HEADER, _SECTION_FLAG
+from metayara import utils
 
 class sectionscan():
     """
@@ -20,7 +21,7 @@ class sectionscan():
     
     def pe_image_section_header(self, field_list):
         """Retrieve Section Number"""
-        offset = self.get_elfanew_offset(self.handle)
+        offset = offset = utils.coff_elfanew(self.handle)
         self.handle.seek(offset+0x06, 0)
         byte = self.handle.read(0x02)
         sectionheader_size = 40
@@ -42,6 +43,7 @@ class sectionscan():
                     realoffset = hex(realoffset)
                     """Convert int to ASCII"""
                     section = str()
+                   
                     for char in byte:
                         if char>0:
                             section+=chr(char)
@@ -68,7 +70,9 @@ class sectionscan():
                         for flag in reversed(bin_value):
                             if 20 <= local_counter < 24:
                                 pass
-                                """Section for Alignment"""
+                                """
+                                Section for Alignment
+                                """
                             else:
                                 flag = int(flag)
                                 if flag == True:
@@ -83,7 +87,7 @@ class sectionscan():
         
             
     def multiple_byte_handler(self, handle, seek, read):
-        elafnew = self.get_elfanew_offset(handle)
+        elafnew = offset = utils.coff_elfanew(handle)
         secion_header_offset = 0xf8
         sectionoffset = (elafnew+secion_header_offset+seek)
         handle.seek(sectionoffset, 0)
@@ -94,7 +98,7 @@ class sectionscan():
         """
         Module for byte handling pe file header
         """
-        offset = self.get_elfanew_offset(handle)
+        offset = offset = utils.coff_elfanew(handle)
         realoffset = (offset+seek+0xf8)
         handle.seek(realoffset)
         byte = handle.read(read)

@@ -3,12 +3,13 @@ from time import gmtime, strftime
 from metayara.metatag import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, tag_pe, _PE_Characteristics, _PE_DDLCharacteristics
 import ctypes
 import importlib
+from metayara import utils
 
 class pescan():
     """
-    >> PE Field header scan
+    >> PE Field header scan - Only supports 32Bit applications for now
     """
-    
+
     def __init__(self, handle, PE_List):
         self.handle = handle
         self.PE_list = PE_List
@@ -104,20 +105,11 @@ class pescan():
                 set_dllchar_flag = (field, intvalue)
                 self.set_char_flags(set_dllchar_flag, _PE_DDLCharacteristics)
     
-    def get_elfanew_offset(self, handle):
-        """
-        Returns PE Header Start offset
-        """
-        handle.seek(60, 0)
-        byte = handle.read(4)
-        header_offset=struct.unpack("<L", byte)[0]
-        return header_offset
-    
     def byte_handler_pe_file_header(self, handle, seek, read):
         """
         Module for byte handling pe file header
         """
-        offset = self.get_elfanew_offset(handle)
+        offset = offset = utils.coff_elfanew(handle)
         realoffset = (offset+seek)
         handle.seek(realoffset)
         byte = handle.read(read)
@@ -137,7 +129,7 @@ class pescan():
         """
         returns integer for pe file optinal header offset
         """
-        offset = self.get_elfanew_offset(handle)
+        offset = offset = utils.coff_elfanew(handle)
         pe_optinal_header_offset = offset + 24
         return pe_optinal_header_offset
         
