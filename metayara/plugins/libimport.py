@@ -24,7 +24,7 @@ class libimport():
             if add_bytes == 0:
                pass  
             self.handle.seek(rawaddress+12+add_bytes, 0)
-            data = self.handle.read(ctypes.sizeof(ctypes.c_uint32))
+            data = self.handle.read(4)
             data = struct.unpack("L", data)[0]
                 
             d = int(data)
