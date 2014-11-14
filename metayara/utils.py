@@ -2,6 +2,9 @@ import mimetypes
 import struct
 
 def get_type(filename):
+    """
+    Get file mimetype
+    """
     type = mimetypes.guess_type(filename)
     return type
 
@@ -33,6 +36,12 @@ def check_pe(handle):
     else:
         return False
     
-    
+def multiple_byte_handler(handle, seek, read):
+    elafnew = offset = coff_elfanew(handle)
+    secion_header_offset = 0xf8
+    sectionoffset = (elafnew+secion_header_offset+seek)
+    handle.seek(sectionoffset, 0)
+    byte = handle.read(read)
+    return byte, sectionoffset
     
     

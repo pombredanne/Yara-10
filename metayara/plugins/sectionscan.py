@@ -27,7 +27,6 @@ class sectionscan():
         sectionheader_size = 40
         Sectionnumbers = struct.unpack("<H", byte)[0]
         
-        
         additional_bytes =int()
         for x in range(Sectionnumbers):
             
@@ -41,7 +40,9 @@ class sectionscan():
                     byte, realoffset = self.multiple_byte_handler(self.handle, seek, read)
                     sectionname = struct.unpack(pack, byte)
                     realoffset = hex(realoffset)
-                    """Convert int to ASCII"""
+                    """
+                    Convert int to ASCII
+                    """
                     section = str()
                    
                     for char in byte:
@@ -56,7 +57,6 @@ class sectionscan():
                     byte, realoffset = self.byte_handler_sectionheader(self.handle, seek, read)
                     intvalue = struct.unpack(pack, byte)[0]
                     hexvalue = hex(intvalue)
-                    #set_optional_field = self.check_tags(field, hexvalue)
                     realoffset = hex(realoffset)
                     
                     insert = (realoffset, str(), field, intvalue, hexvalue)
