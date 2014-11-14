@@ -5,7 +5,7 @@ from metayara import utils
 
 class libimport():
     """
-    >> Scan for imported library's in the header
+    >> PE Field header scan - Only supports 32Bit applications for now
     """
     
     def __init__(self, handle, Lib_List):
