@@ -1,7 +1,7 @@
 import struct
 from time import gmtime, strftime
 from metayara.metatag import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, tag_pe, _PE_Characteristics, _PE_DDLCharacteristics
-import ctypes
+import ctypes, sys
 import importlib
 from metayara import utils
 
@@ -13,12 +13,15 @@ class pescan():
     def __init__(self, handle, PE_List):
         self.handle = handle
         self.PE_list = PE_List
+        self.is_pe(handle)
         self.set_field_header()
         self.pefile()
     
-    def check_if_pe(self):
-        """CHECKS BEFORE RUN"""
-        pass
+    def is_pe(self, handle):
+        check = utils.check_pe(handle)
+        if check is False:
+            sys.exit("The image is not Portable Executable")
+            
         
     def pefile(self):
         """

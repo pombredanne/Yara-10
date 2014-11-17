@@ -10,7 +10,13 @@ class libimport():
     def __init__(self, handle, Lib_List):
         self.handle = handle
         self.Lib_List = Lib_List
+        self.is_pe(handle)
         self.libimports()
+    
+    def is_pe(self, handle):
+        check = utils.check_pe(handle)
+        if check is False:
+            sys.exit("The image is not Portable Executable")
         
     def libimports(self):
         setup = ("Offset", "LibraryName", "Value")
@@ -25,7 +31,7 @@ class libimport():
                pass  
             self.handle.seek(rawaddress+12+add_bytes, 0)
             data = self.handle.read(4)
-            data = struct.unpack("L", data)[0]
+            data = struct.unpack("<L", data)[0]
                 
             d = int(data)
             """

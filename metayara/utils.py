@@ -27,11 +27,17 @@ def coff_elfanew(handle):
     return header_offset
 
 def check_pe(handle):
-    handle.seek(128+24, 0)
-    data =handle.read(2)
-    data = struct.unpack("H", data)[0]
+    handle.seek(0, 0)
+    data = handle.read(2)
     
-    if data == 0x10b:
+    if data == b'MZ':
+        return True
+    
+    handle.seek(coff_elfanew(handle), 0)
+    data = handle.read(4)
+    data = data.decode('utf-8', 'ignore')
+    
+    if data == 'PE\x00\x00':
         return True
     else:
         return False

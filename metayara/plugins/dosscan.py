@@ -1,6 +1,8 @@
 import struct
 from metayara.metatag import _IMAGE_DOS_HEADER, _DOS_HEADER_INFO
 import ctypes
+import sys
+from metayara import utils
 
 class dosscan():
     """
@@ -9,9 +11,16 @@ class dosscan():
     def __init__(self, handle, DOS_list):
         self.handle = handle
         self.DOS_list = DOS_list  
+        self.is_pe(handle)
         self.set_field_header()  
         self.dos_header_file()
-       
+        
+        
+    def is_pe(self, handle):
+        check = utils.check_pe(handle)
+        if check is False:
+            sys.exit("The image is not Portable Executable")
+            
     def check_tags(self, field, hexvalue):
         """
         Check for tags in metatag.tag

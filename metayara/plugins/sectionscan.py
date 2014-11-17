@@ -1,6 +1,7 @@
 import struct
 from metayara.metatag import _SECTION_HEADER, _SECTION_FLAG
 from metayara import utils
+import sys
 
 class sectionscan():
     """
@@ -9,9 +10,16 @@ class sectionscan():
     def __init__(self, handle, PE_List):
         self.handle = handle
         self.PE_List = PE_List
+        self.is_pe(handle)
         self.set_field_header()
         self.pe_section()
         
+        
+    def is_pe(self, handle):
+        check = utils.check_pe(handle)
+        if check is False:
+            sys.exit("The image is not Portable Executable")
+            
     def set_field_header(self):
         setup = ("Offset", "Section Name", "Field Name", "Integer Value", "Hex Value")
         self.PE_List.append(setup)
