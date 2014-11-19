@@ -43,17 +43,20 @@ class libimport():
                 finalseekoffset= (rawaddress + finalseek)
                    
                 self.handle.seek(finalseekoffset, 0)
-                data = self.handle.read(15)
-                data = struct.unpack(15 * "B", data)
+                x = 1
                 section = str()
-                for i in data:
-                    if i == 0:
+                while True:
+                    data = self.handle.read(x)
+                    data = struct.unpack("B", data)[0]
+                    
+                    if data == 0:
                         break
                     else:
-                        section+=chr(i)
-                        pass
+                        section+=chr(data)
+                
                 insert = (hex(finalseekoffset), section)
                 self.Lib_List.append(insert)
+                
             else:
                 break
             add_bytes+=20
