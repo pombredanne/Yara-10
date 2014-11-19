@@ -54,7 +54,7 @@ class libimport():
                     else:
                         section+=chr(data)
                 
-                insert = (hex(finalseekoffset), section)
+                insert = (hex(finalseekoffset), section.lower())
                 self.Lib_List.append(insert)
                 
             else:
@@ -84,7 +84,7 @@ class libimport():
         sectionheader_size = 40
         Sectionnumbers = struct.unpack("<H", byte)[0]
         
-        additional_bytes =int()
+        additional_bytes = int()
         for x in range(Sectionnumbers):
             
             if x> 0:
