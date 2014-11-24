@@ -82,6 +82,7 @@ class pescan():
     def pe_image_file_header(self, field_list):
         for field, seek, read, pack in _IMAGE_FILE_HEADER:
             byte, realoffset = self.byte_handler_pe_file_header(self.handle, seek, ctypes.sizeof(read))
+            
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
             set_optional_field = self.check_tags(field, hexvalue)

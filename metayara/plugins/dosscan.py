@@ -45,6 +45,7 @@ class dosscan():
     def dos_image_header(self):
         for name, seek, read, pack in _IMAGE_DOS_HEADER:
             byte, realoffset = self.byte_handler(self.handle, seek, ctypes.sizeof(read))
+            print(byte)
             integer = struct.unpack(pack, byte)[0]
             hexvalue = hex(integer)
             realoffset = hex(realoffset)

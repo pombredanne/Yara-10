@@ -3,7 +3,8 @@ import sys
 if sys.version_info < (3, 0, 0):
     sys.stderr.write("Requires version 3.0 or higher")
     sys.exit(1)
-
+    
+import ctypes
 import optparse
 import os
 import re
