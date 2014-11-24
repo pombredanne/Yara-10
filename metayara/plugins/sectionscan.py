@@ -2,6 +2,7 @@ import struct
 from metayara.metatag import _SECTION_HEADER, _SECTION_FLAG
 from metayara import utils
 import sys
+import ctypes
 
 class sectionscan():
     """
@@ -21,7 +22,7 @@ class sectionscan():
             sys.exit("The image is not Portable Executable")
             
     def set_field_header(self):
-        setup = ("Offset", "Section Name", "Field Name", "Integer Value", "Hex Value")
+        setup = ("Offset", "Type", "Section Name", "Field Name", "Integer Value", "Hex Value")
         self.PE_List.append(setup)
 
     def pe_section(self):
@@ -45,7 +46,7 @@ class sectionscan():
                 if field == str('Name;'):
                     if additional_bytes > 0:
                         seek+=additional_bytes
-                    byte, realoffset = self.multiple_byte_handler(self.handle, seek, read)
+                    byte, realoffset = self.multiple_byte_handler(self.handle, seek, (8 * ctypes.sizeof(read)))
                     sectionname = struct.unpack(pack, byte)
                     realoffset = hex(realoffset)
                     """
@@ -56,23 +57,23 @@ class sectionscan():
                     for char in byte:
                         if char>0:
                             section+=chr(char)
-                    insert = (realoffset, section,  str(), str(), str())
+                    insert = (realoffset, utils.ctypes_convert(read), section,  str(), str(), str())
                     field_list.append(insert)  
                     
                 else:
                     if additional_bytes > 0:
                         seek+=additional_bytes
-                    byte, realoffset = self.byte_handler_sectionheader(self.handle, seek, read)
+                    byte, realoffset = self.byte_handler_sectionheader(self.handle, seek, ctypes.sizeof(read))
                     intvalue = struct.unpack(pack, byte)[0]
                     hexvalue = hex(intvalue)
                     realoffset = hex(realoffset)
                     
-                    insert = (realoffset, str(), field, intvalue, hexvalue)
+                    insert = (realoffset, utils.ctypes_convert(read), str(), field, intvalue, hexvalue)
                     field_list.append(insert)  
                     local_counter = int()
                     if field == str("Characteristics;"):
                         bin_value = ('{:032b}'.format(intvalue))
-                        clearline = (5 * ("",))
+                        clearline = (6 * ("",))
                         field_list.append(clearline)
                         
                         for flag in reversed(bin_value):
@@ -87,10 +88,10 @@ class sectionscan():
                                     
                                     flag_name = _SECTION_FLAG[local_counter]
                                     flag_set = "TRUE"
-                                    insert = ("", "FLAG", flag_name, flag_set, "")
+                                    insert = ("", "", "FLAG", flag_name, flag_set, "")
                                     field_list.append(insert)
                             local_counter+=1
-                        clearline = (5 * ("",))
+                        clearline = (6 * ("",))
                         field_list.append(clearline)
         
             

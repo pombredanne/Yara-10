@@ -186,16 +186,16 @@ _IMAGE_OPTIONAL_HEADER = [('Magic;',                                            
                           ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xd8,   ctypes.c_ulong, '<L'),
                           ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xdc,   ctypes.c_ulong, '<L')]
 
-_SECTION_HEADER = [   ('Name;',                     0,   8,     '<BBBBBBBB'),
-                      ('VirtualSize;',              8,   4,     '<L'),
-                      ('VirtualAddress;',           12,  4,     '<L'),
-                      ('SizeOfRawData;',            16,  4,     '<L'),
-                      ('PointerToRawData;',         20,  4,  '<L'),
-                      ('PointerToRelocations;',     24,  4,     '<L'),
-                      ('PointerToLinenumbers;',     28,  4,     '<L'),
-                      ('NumberOfRelocations;',      32,  2,     '<H'),
-                      ('NumberOfLinenumbers;',      34,  2,     '<H'),
-                      ('Characteristics;',          36,  4,     '<L')]
+_SECTION_HEADER = [   ('Name;',                     0,   ctypes.c_byte,     '<BBBBBBBB'),
+                      ('VirtualSize;',              8,   ctypes.c_ulong,     '<L'),
+                      ('VirtualAddress;',           12,  ctypes.c_ulong,     '<L'),
+                      ('SizeOfRawData;',            16,  ctypes.c_ulong,     '<L'),
+                      ('PointerToRawData;',         20,  ctypes.c_ulong,  '<L'),
+                      ('PointerToRelocations;',     24,  ctypes.c_ulong,     '<L'),
+                      ('PointerToLinenumbers;',     28,  ctypes.c_ulong,     '<L'),
+                      ('NumberOfRelocations;',      32,  ctypes.c_ushort,     '<H'),
+                      ('NumberOfLinenumbers;',      34,  ctypes.c_ushort,     '<H'),
+                      ('Characteristics;',          36,  ctypes.c_ulong,     '<L')]
 
 _SECTION_FLAG = [('IMAGE_SCN_TYPE_DSECT'),
                  ('MAGE_SCN_TYPE_NOLOAD'),
