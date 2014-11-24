@@ -19,7 +19,7 @@ class libimport():
             sys.exit("The image is not Portable Executable")
         
     def libimports(self):
-        setup = ("Offset", "LibraryName", "Value")
+        setup = ("Offset", "Size of Offset", "LibraryName", "Value")
         self.Lib_List.append(setup)
         imagebase = self.get_imagebase()
         virtualaddress, rawaddress = self.find_import_section()
@@ -54,7 +54,7 @@ class libimport():
                     else:
                         section+=chr(data)
                 
-                insert = (hex(finalseekoffset), section.lower())
+                insert = (hex(finalseekoffset), len(section), section.lower())
                 self.Lib_List.append(insert)
                 
             else:

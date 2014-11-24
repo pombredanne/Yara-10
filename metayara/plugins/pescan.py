@@ -34,7 +34,7 @@ class pescan():
         """
         Returns Flags from search list
         """
-        clearline = (5 * ("",))
+        clearline = (6 * ("",))
         self.PE_list.append(clearline)
         name, intvalue = flag
         binary_value = ('{:016b}'.format(intvalue))
@@ -57,13 +57,14 @@ class pescan():
                 flag_set = "FALSE"
             
             
-            insert = ("", "FLAG", flag_name, flag_set,flag_description)
+            insert = (" ", " ", "FLAG", flag_name, flag_set, flag_description)
+            
             self.PE_list.append(insert)
             counter+=1
         self.PE_list.append(clearline)
         
     def set_field_header(self):
-        setup = ("Offset", "Field", "Integer Value", "Hex Value", "Optional Field")
+        setup = ("Offset", "Type", "Field", "Integer Value", "Hex Value", "Optional Field")
         self.PE_list.append(setup)
         
     def check_tags(self, field, hexvalue):
@@ -80,12 +81,13 @@ class pescan():
             
     def pe_image_file_header(self, field_list):
         for field, seek, read, pack in _IMAGE_FILE_HEADER:
-            byte, realoffset = self.byte_handler_pe_file_header(self.handle, seek, read)
+            byte, realoffset = self.byte_handler_pe_file_header(self.handle, seek, ctypes.sizeof(read))
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
             set_optional_field = self.check_tags(field, hexvalue)
             realoffset = hex(realoffset)
-            insert = (realoffset, field, intvalue, hexvalue, set_optional_field)
+            insert = (realoffset, utils.ctypes_convert(read), field, intvalue, hexvalue, set_optional_field)
+            
             if field == "Characteristics;":
                 set_char_flag = (field, intvalue)
             
@@ -97,12 +99,13 @@ class pescan():
     def pe_image_optional_header(self, field_list):
         
         for field, seek, read, pack in _IMAGE_OPTIONAL_HEADER:
-            byte, realoffset = self.byte_handler_pe_file_optional_header(self.handle, seek, read)
+            byte, realoffset = self.byte_handler_pe_file_optional_header(self.handle, seek, ctypes.sizeof(read))
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
             set_optional_field = self.check_tags(field, hexvalue)
             realoffset = hex(realoffset)
-            insert = (realoffset, field, intvalue, hexvalue, set_optional_field)    
+            insert = (realoffset, utils.ctypes_convert(read), field, intvalue, hexvalue, set_optional_field)  
+
             field_list.append(insert)
             if field == "DLLCharacteristics;":
                 set_dllchar_flag = (field, intvalue)

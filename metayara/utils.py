@@ -1,5 +1,6 @@
 import mimetypes 
 import struct
+import re
 
 def get_type(filename):
     """
@@ -49,5 +50,11 @@ def multiple_byte_handler(handle, seek, read):
     handle.seek(sectionoffset, 0)
     byte = handle.read(read)
     return byte, sectionoffset
+
+def ctypes_convert(stringtype):
+    offsetsize = str(stringtype)
+    regex = re.compile("'.+'")
+    match = re.findall(regex, offsetsize)
+    return match[0]
     
     
