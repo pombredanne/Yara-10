@@ -85,9 +85,9 @@ _PE_DDLCharacteristics = [('RESERVED',                                      'Res
 
 _IMAGE_FILE_HEADER = [('Machine;',                 0x04,  ctypes.c_ushort, '<H'),
                       ('NumberOfSections;',        0x06,  ctypes.c_ushort, '<H'),
-                      ('Time Date Stamp;',         0x08,  ctypes.c_ulong, '<L'),
-                      ('PointerToSymbolTable;',    0xc,   ctypes.c_ulong, '<L'),
-                      ('NumberOfSymbols;',         0x10,  ctypes.c_ulong, '<L'),
+                      ('Time Date Stamp;',         0x08,  ctypes.c_ulong,  '<L'),
+                      ('PointerToSymbolTable;',    0xc,   ctypes.c_ulong,  '<L'),
+                      ('NumberOfSymbols;',         0x10,  ctypes.c_ulong,  '<L'),
                       ('SizeofOptionalHeader;',    0x14,  ctypes.c_ushort, '<H'),
                       ('Characteristics;',         0x16,  ctypes.c_ushort, '<H')]
          
@@ -121,7 +121,7 @@ _IMAGE_DOS_HEADER = [('e_magic',                    0x00,   ctypes.c_ushort, '<H
                      ('e_res2[7]',                  0x36,   ctypes.c_ushort, '<H'),
                      ('e_res2[8]',                  0x38,   ctypes.c_ushort, '<H'),
                      ('e_res2[9]',                  0x3a,   ctypes.c_ushort, '<H'),
-                     ('e_lfanew',                   0x3c,   ctypes.c_ulong,  '<L')]
+                     ('e_lfanew',                   0x3c,   ctypes.c_long,  '<L')]
 
 _IMAGE_OPTIONAL_HEADER = [('Magic;',                                                    0x00,   ctypes.c_ushort, '<H'),
                           ('MajorLinkerVersion;',                                       0x02,   ctypes.c_byte, '<B'),
