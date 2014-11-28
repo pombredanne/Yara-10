@@ -1,9 +1,10 @@
 import struct
 from metayara.metatag import _SECTION_HEADER
 import ctypes
+import encodings
 from metayara import utils
 
-class libimport():
+class pelibimport():
     """
     >> Scan for imported library's in the header
     """
@@ -99,13 +100,13 @@ class libimport():
                     realoffset = int(realoffset)
                     """
                     Convert int to ASCII
-                    """
+                    """ 
                     section = str()
-                   
+                    
                     for char in byte:
                         if char>0:
                             section+=chr(char)
-                    
+                   
                     if section == ".idata":
                         virtadd = realoffset+12
                         self.handle.seek(virtadd, 0)

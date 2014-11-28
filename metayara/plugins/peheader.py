@@ -5,7 +5,7 @@ import ctypes, sys
 import importlib
 from metayara import utils
 
-class pescan():
+class peheader():
     """
     >> PE Field header scan - Only supports 32Bit applications for now
     """

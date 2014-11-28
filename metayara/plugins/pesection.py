@@ -4,7 +4,7 @@ from metayara import utils
 import sys
 import ctypes
 
-class sectionscan():
+class pesection():
     """
     >> PE Section Header scan module
     """
@@ -29,7 +29,9 @@ class sectionscan():
         self.pe_image_section_header(self.PE_List)
     
     def pe_image_section_header(self, field_list):
-        """Retrieve Section Number"""
+        """
+        Retrieve Section Number
+        """
         offset = offset = utils.coff_elfanew(self.handle)
         self.handle.seek(offset+0x06, 0)
         byte = self.handle.read(0x02)

@@ -55,6 +55,7 @@ def ctypes_convert(stringtype):
     offsetsize = str(stringtype)
     regex = re.compile("'.+'")
     match = re.findall(regex, offsetsize)
-    return match[0]
+    match = str(match)
+    return match[12:-3]
     
     

@@ -5,7 +5,7 @@ import sys
 import re
 from metayara import utils
 
-class dosscan():
+class dosheader():
     """
     >> DOS Header scan
     """
