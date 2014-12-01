@@ -34,7 +34,7 @@ class elfheader():
         
     def elffile(self, handle):
         endian = utils.get_endianess(handle)
-        for name, seek ,read, pack in _SECTION_HEADER:
+        for name, seek ,read, pack in _ELF_SECTION_HEADER:
             
             byte, realoffset = self.byte_handler(handle, seek, ctypes.sizeof(read))
             integer = struct.unpack((endian+pack), byte)[0]
