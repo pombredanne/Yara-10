@@ -233,7 +233,7 @@ _SECTION_FLAG = [('IMAGE_SCN_TYPE_DSECT'),
                  ('IMAGE_SCN_MEM_WRITE')]
 
 
-_SECTION_HEADER = [('Magic Number;'                 ,   0,   ctypes.c_uint32,       'L'),
+_ELF_SECTION_HEADER = [('Magic Number;'                 ,   0,   ctypes.c_uint32,       'L'),
                    ('Class'                         ,   4,   ctypes.c_byte,         'B'),
                    ('Endianess'                     ,   5,   ctypes.c_byte,         'B'),
                    ('Version'                       ,   6,   ctypes.c_byte,         'B'),
@@ -291,12 +291,15 @@ _ELF_PROGRAM_HEADER = [('Type;',                0,   ctypes.c_uint32,   'L'),
                        ('Flags;',               24,  ctypes.c_uint32,   'L'),
                        ('Alignment;',           28,  ctypes.c_uint32,   'L')]
 
-_ELF_PROGRAMHEADER_TYPE = [('NULL',     0           ),
-                           ('LOAD',     1           ),
-                           ('DYNAMIC',  2           ),
-                           ('INTERP',   3           ),
-                           ('NOTE',     4           ),
-                           ('SHLTB',    5           ),
-                           ('PHDR',     6           ),
-                           ('LORPOC',   0x70000000  ),
-                           ('HIPROC',   0x7fffffff  )]
+_ELF_PROGRAMHEADER_TYPE = [(0,     'NULL'           ),
+                           (1,     'LOAD'           ),
+                           (2,  'DYNAMIC'           ),
+                           (3,   'INTERP'           ),
+                           (4,     'NOTE'           ),
+                           (5,    'SHLTB'           ),
+                           (6,     'PHDR'           ),
+                           (7,      'TLS'           ),
+                           (1879048192,      'LORPOC'           ),
+                           (2147483647,      'HIPROC'           ),
+                           (1685382480,      'GNU_EH_FRAME'           ),
+                           (1685382481,      'GNU_STACK'           )]

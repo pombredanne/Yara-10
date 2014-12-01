@@ -1,4 +1,4 @@
-from metayara.metatag import _SECTION_HEADER, _SECTION_HEADER_INFO
+from metayara.metatag import _ELF_SECTION_HEADER, _SECTION_HEADER_INFO
 import ctypes
 from metayara import utils
 import struct

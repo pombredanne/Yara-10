@@ -43,7 +43,7 @@ def check_pe(handle):
     else:
         return False
     
-def multiple_byte_handler(handle, seek, read):
+def multiple_byte_handler_pe(handle, seek, read):
     elafnew = offset = coff_elfanew(handle)
     secion_header_offset = 0xf8
     sectionoffset = (elafnew+secion_header_offset+seek)
@@ -60,6 +60,12 @@ def ctypes_convert(stringtype):
     
 def get_elf_programheader_number(handle):
     handle.seek(44, 0)
+    data = handle.read(2)
+    data = struct.unpack("H", data)[0]
+    return data
+
+def get_elf_programheader_entry(handle):
+    handle.seek(28, 0)
     data = handle.read(2)
     data = struct.unpack("H", data)[0]
     return data

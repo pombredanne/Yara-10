@@ -48,7 +48,7 @@ class pesection():
                 if field == str('Name;'):
                     if additional_bytes > 0:
                         seek+=additional_bytes
-                    byte, realoffset = self.multiple_byte_handler(self.handle, seek, (8 * ctypes.sizeof(read)))
+                    byte, realoffset = self.multiple_byte_handler_pe(self.handle, seek, (8 * ctypes.sizeof(read)))
                     sectionname = struct.unpack(pack, byte)
                     realoffset = hex(realoffset)
                     """
@@ -97,7 +97,7 @@ class pesection():
                         field_list.append(clearline)
         
             
-    def multiple_byte_handler(self, handle, seek, read):
+    def multiple_byte_handler_pe(self, handle, seek, read):
         elafnew = offset = utils.coff_elfanew(handle)
         secion_header_offset = 0xf8
         sectionoffset = (elafnew+secion_header_offset+seek)
