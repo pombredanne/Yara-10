@@ -33,7 +33,7 @@ class elfheader():
         self.ELF_list.append(setup) 
         
     def elffile(self, handle):
-        endian = self.get_endianess(handle)
+        endian = utils.get_endianess(handle)
         for name, seek ,read, pack in _SECTION_HEADER:
             
             byte, realoffset = self.byte_handler(handle, seek, ctypes.sizeof(read))
@@ -49,14 +49,3 @@ class elfheader():
         realoffset = seek
         byte = handle.read(read)
         return byte, realoffset
-    
-    def get_endianess(self, handle):
-        handle.seek(5, 0)
-        data = handle.read(1)
-        data = struct.unpack("B", data)[0]
-        
-        if data == 1:
-            return '<'
-        elif data == 2:
-            return '>'
-        

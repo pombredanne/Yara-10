@@ -83,13 +83,13 @@ _PE_DDLCharacteristics = [('RESERVED',                                      'Res
                        ('RESERVED',                                         'Reserved'),
                        ('IMAGE_DLLCHARACTERISTICS_TERMINAL_SERVER_AWARE',   'Terminal server aware')]
 
-_IMAGE_FILE_HEADER = [('Machine;',                 0x04,  ctypes.c_ushort, '<H'),
-                      ('NumberOfSections;',        0x06,  ctypes.c_ushort, '<H'),
+_IMAGE_FILE_HEADER = [('Machine;',                 0x04,  ctypes.c_ushort,  '<H'),
+                      ('NumberOfSections;',        0x06,  ctypes.c_ushort,  '<H'),
                       ('Time Date Stamp;',         0x08,  ctypes.c_uint32,  '<L'),
                       ('PointerToSymbolTable;',    0xc,   ctypes.c_uint32,  '<L'),
                       ('NumberOfSymbols;',         0x10,  ctypes.c_uint32,  '<L'),
-                      ('SizeofOptionalHeader;',    0x14,  ctypes.c_ushort, '<H'),
-                      ('Characteristics;',         0x16,  ctypes.c_ushort, '<H')]
+                      ('SizeofOptionalHeader;',    0x14,  ctypes.c_ushort,  '<H'),
+                      ('Characteristics;',         0x16,  ctypes.c_ushort,  '<H')]
          
 _IMAGE_DOS_HEADER = [('e_magic',                    0x00,   ctypes.c_ushort, '<H'),
                      ('e_cblp',                     0x02,   ctypes.c_ushort, '<H'),
@@ -124,8 +124,8 @@ _IMAGE_DOS_HEADER = [('e_magic',                    0x00,   ctypes.c_ushort, '<H
                      ('e_lfanew',                   0x3c,   ctypes.c_int32,  '<L')]
 
 _IMAGE_OPTIONAL_HEADER = [('Magic;',                                                    0x00,   ctypes.c_ushort, '<H'),
-                          ('MajorLinkerVersion;',                                       0x02,   ctypes.c_byte, '<B'),
-                          ('MinorLinkerVersion;',                                       0x03,   ctypes.c_byte, '<B'),
+                          ('MajorLinkerVersion;',                                       0x02,   ctypes.c_byte,   '<B'),
+                          ('MinorLinkerVersion;',                                       0x03,   ctypes.c_byte,   '<B'),
                           ('SizeofCode;',                                               0x04,   ctypes.c_uint32, '<L'),
                           ('SizeOfInitializedData;',                                    0x08,   ctypes.c_uint32, '<L'),
                           ('SizeOfUninitializedData;',                                  0x0c,   ctypes.c_uint32, '<L'),
@@ -186,11 +186,11 @@ _IMAGE_OPTIONAL_HEADER = [('Magic;',                                            
                           ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xd8,   ctypes.c_uint32, '<L'),
                           ('IMAGE_DIRECTORY_ENTRY_RESERVED;',                           0xdc,   ctypes.c_uint32, '<L')]
 
-_SECTION_HEADER = [   ('Name;',                     0,   ctypes.c_byte,     '<BBBBBBBB'),
+_SECTION_HEADER = [   ('Name;',                     0,   ctypes.c_byte,       '<BBBBBBBB'),
                       ('VirtualSize;',              8,   ctypes.c_uint32,     '<L'),
                       ('VirtualAddress;',           12,  ctypes.c_uint32,     '<L'),
                       ('SizeOfRawData;',            16,  ctypes.c_uint32,     '<L'),
-                      ('PointerToRawData;',         20,  ctypes.c_uint32,  '<L'),
+                      ('PointerToRawData;',         20,  ctypes.c_uint32,     '<L'),
                       ('PointerToRelocations;',     24,  ctypes.c_uint32,     '<L'),
                       ('PointerToLinenumbers;',     28,  ctypes.c_uint32,     '<L'),
                       ('NumberOfRelocations;',      32,  ctypes.c_ushort,     '<H'),
@@ -281,3 +281,22 @@ _SECTION_HEADER_INFO = [('Class',       1,          'ELF 32 Bit'),
                         ('e_machine',   0x3E,       'x86-64'),
                         ('e_machine',   0xB7,       'AArch64'),
                         ('e_version',   1 ,         'Original Version')]
+
+_ELF_PROGRAM_HEADER = [('Type;',                0,   ctypes.c_uint32,   'L'),
+                       ('Offset;',              4,   ctypes.c_uint32,   'L'),
+                       ('Virtual Addr;',        8,   ctypes.c_uint32,   'L'),
+                       ('Physical Addr;',       12,  ctypes.c_uint32,   'L'),
+                       ('FileSize;',            16,  ctypes.c_uint32,   'L'),
+                       ('MemorySize;',          20,  ctypes.c_uint32,   'L'),
+                       ('Flags;',               24,  ctypes.c_uint32,   'L'),
+                       ('Alignment;',           28,  ctypes.c_uint32,   'L')]
+
+_ELF_PROGRAMHEADER_TYPE = [('NULL',     0           ),
+                           ('LOAD',     1           ),
+                           ('DYNAMIC',  2           ),
+                           ('INTERP',   3           ),
+                           ('NOTE',     4           ),
+                           ('SHLTB',    5           ),
+                           ('PHDR',     6           ),
+                           ('LORPOC',   0x70000000  ),
+                           ('HIPROC',   0x7fffffff  )]

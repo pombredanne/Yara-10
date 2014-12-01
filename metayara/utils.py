@@ -58,4 +58,20 @@ def ctypes_convert(stringtype):
     match = str(match)
     return match[12:-3]
     
+def get_elf_programheader_number(handle):
+    handle.seek(44, 0)
+    data = handle.read(2)
+    data = struct.unpack("H", data)[0]
+    return data
+
+def get_endianess(handle):
+    handle.seek(5, 0)
+    data = handle.read(1)
+    data = struct.unpack("B", data)[0]
+        
+    if data == 1:
+        return '<'
+    elif data == 2:
+        return '>'
+        
     
