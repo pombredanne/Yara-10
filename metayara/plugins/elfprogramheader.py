@@ -9,7 +9,6 @@ class elfprogramheader():
     >> ELF Field  program header header scan - Only supports 32 Bit applications for now
     """
     
-    
     def __init__(self, handle, ELF_list):
         self.handle = handle
         self.ELF_list = ELF_list
@@ -66,8 +65,6 @@ class elfprogramheader():
                     realoffset = hex(realoffset)
                     insert = (realoffset, utils.ctypes_convert(read), str(), name, intvalue, hexvalue)
                     self.ELF_list.append(insert)
-                    
-                    
                     
                     
     def byte_handler(self, handle, seek, read):
