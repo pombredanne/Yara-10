@@ -22,6 +22,9 @@ class pesection():
             sys.exit("The image is not Portable Executable")
             
     def set_field_header(self):
+        """
+        Set Field Header
+        """
         setup = ("Offset", "Type", "Section Name", "Field Name", "Integer Value", "Hex Value")
         self.PE_List.append(setup)
 
@@ -42,9 +45,15 @@ class pesection():
         for x in range(Sectionnumbers):
             
             if x> 0:
+                """
+                Add setion header size for next section 
+                """
                 additional_bytes+= sectionheader_size
                 
             for field, seek, read, pack in _SECTION_HEADER:
+                """
+                retrieve PE section header 
+                """
                 if field == str('Name;'):
                     if additional_bytes > 0:
                         seek+=additional_bytes
@@ -98,6 +107,9 @@ class pesection():
         
             
     def multiple_byte_handler_pe(self, handle, seek, read):
+        """
+        Byte handling for PE section offset
+        """
         elafnew = offset = utils.coff_elfanew(handle)
         secion_header_offset = 0xf8
         sectionoffset = (elafnew+secion_header_offset+seek)

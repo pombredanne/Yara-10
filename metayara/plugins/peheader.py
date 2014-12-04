@@ -64,6 +64,9 @@ class peheader():
         self.PE_list.append(clearline)
         
     def set_field_header(self):
+        """
+        Set Field header
+        """
         setup = ("Offset", "Type", "Field", "Integer Value", "Hex Value", "Optional Field")
         self.PE_list.append(setup)
         
@@ -80,9 +83,11 @@ class peheader():
         return optional
             
     def pe_image_file_header(self, field_list):
+        """
+        retrieve PE header 
+        """
         for field, seek, read, pack in _IMAGE_FILE_HEADER:
             byte, realoffset = self.byte_handler_pe_file_header(self.handle, seek, ctypes.sizeof(read))
-            
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
             set_optional_field = self.check_tags(field, hexvalue)
@@ -98,7 +103,9 @@ class peheader():
             self.set_char_flags(set_char_flag, _PE_Characteristics)  
         
     def pe_image_optional_header(self, field_list):
-        
+        """
+        Crossreference byte with information from metalist
+        """
         for field, seek, read, pack in _IMAGE_OPTIONAL_HEADER:
             byte, realoffset = self.byte_handler_pe_file_optional_header(self.handle, seek, ctypes.sizeof(read))
             intvalue = struct.unpack(pack, byte)[0]

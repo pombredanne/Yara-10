@@ -28,6 +28,9 @@ def coff_elfanew(handle):
     return header_offset
 
 def check_pe(handle):
+    """
+    Check if file is Portable Executable
+    """
     handle.seek(0, 0)
     data = handle.read(2)
     
@@ -44,6 +47,9 @@ def check_pe(handle):
         return False
     
 def multiple_byte_handler_pe(handle, seek, read):
+    """
+    Byte handler for secion header
+    """
     elafnew = offset = coff_elfanew(handle)
     secion_header_offset = 0xf8
     sectionoffset = (elafnew+secion_header_offset+seek)
@@ -52,6 +58,9 @@ def multiple_byte_handler_pe(handle, seek, read):
     return byte, sectionoffset
 
 def ctypes_convert(stringtype):
+    """
+    Convert ctypes to string for output
+    """
     offsetsize = str(stringtype)
     regex = re.compile("'.+'")
     match = re.findall(regex, offsetsize)
@@ -59,6 +68,9 @@ def ctypes_convert(stringtype):
     return match[12:-3]
     
 def get_elf_programheader_number(handle):
+    """
+    Retrieve Number of Program headers 
+    """
     handle.seek(44, 0)
     data = handle.read(2)
     endian = get_endianess(handle)
@@ -66,6 +78,9 @@ def get_elf_programheader_number(handle):
     return data
 
 def get_elf_programheader_entry(handle):
+    """
+    Retrieve Entry Program Headers
+    """
     handle.seek(28, 0)
     data = handle.read(4)
     endian = get_endianess(handle)
@@ -73,6 +88,9 @@ def get_elf_programheader_entry(handle):
     return data
 
 def get_elf_section_entry(handle):
+    """
+    Retrieve Entry Section Header
+    """
     handle.seek(32, 0)
     data = handle.read(4)
     endian = get_endianess(handle)
@@ -80,6 +98,9 @@ def get_elf_section_entry(handle):
     return data
 
 def get_elf_section_entry_size(handle):
+    """
+    Retrieve Size of Section header
+    """
     handle.seek(46, 0)
     data = handle.read(2)
     endian = get_endianess(handle)
@@ -87,6 +108,9 @@ def get_elf_section_entry_size(handle):
     return data
 
 def get_elf_section_count(handle):
+    """
+    Retrieve Number ofSection header
+    """
     handle.seek(48, 0)
     data = handle.read(2)
     endian = get_endianess(handle)
@@ -94,6 +118,9 @@ def get_elf_section_count(handle):
     return data
 
 def get_elf_shtrtable_index(handle):
+    """
+    Retrieve Section header string table
+    """
     handle.seek(50, 0)
     data = handle.read(2)
     endian = get_endianess(handle)
@@ -101,6 +128,9 @@ def get_elf_shtrtable_index(handle):
     return data
 
 def get_endianess(handle):
+    """
+    Retrieve Endianess for ELF header
+    """
     handle.seek(5, 0)
     data = handle.read(1)
     data = struct.unpack("B", data)[0]

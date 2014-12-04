@@ -14,7 +14,7 @@ class elfheader():
         self.ELF_list = ELF_list
         #self.is_elf(handle)
         self.set_field_header()
-        self.elffile(handle)
+        self.elf_file(handle)
         
     def check_tags(self, field, hexvalue):
         """
@@ -29,10 +29,16 @@ class elfheader():
         return optional
         
     def set_field_header(self):
+        """
+        Set Field header
+        """
         setup = ("Offset", "Bit Type", "Field", "Integer", "Hex", "Optional Field")
         self.ELF_list.append(setup) 
         
-    def elffile(self, handle):
+    def elf_file(self, handle):
+        """
+        Retrieve Elf header 
+        """
         endian = utils.get_endianess(handle)
         for name, seek ,read, pack in _ELF_SECTION_HEADER:
             
@@ -45,6 +51,9 @@ class elfheader():
             self.ELF_list.append(insert)
             
     def byte_handler(self, handle, seek, read):
+        """
+        Retrieve Offset and Byte from handle
+        """
         handle.seek(seek)
         realoffset = seek
         byte = handle.read(read)

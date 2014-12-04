@@ -35,14 +35,22 @@ class dosheader():
         return optional
        
     def set_field_header(self):
+        """
+        Set header list
+        """
         setup = ("Offset", "Type", "Field", "Integer", "Hexadecimal" ,"OptionalFields")
         self.DOS_list.append(setup) 
         
     def dos_header_file(self):
-        """Returns a list with DOS header fields"""
+        """
+        Returns a list with DOS header fields
+        """
         self.dos_image_header()
         
     def dos_image_header(self):
+        """
+        Retrieve Dos information from handle
+        """
         for name, seek, read, pack in _IMAGE_DOS_HEADER:
             byte, realoffset = self.byte_handler(self.handle, seek, ctypes.sizeof(read))
             integer = struct.unpack(pack, byte)[0]
@@ -53,6 +61,9 @@ class dosheader():
             self.DOS_list.append(insert)
     
     def byte_handler(self, handle, seek, read):
+        """
+        Retrieve Offset and Byte from handle
+        """
         handle.seek(seek)
         realoffset = seek
         byte = handle.read(read)

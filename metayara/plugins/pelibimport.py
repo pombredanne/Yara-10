@@ -6,7 +6,7 @@ from metayara import utils
 
 class pelibimport():
     """
-    >> Scan for imported library's in the header
+    >> Scan for imported librarys in the header
     """
     def __init__(self, handle, Lib_List):
         self.handle = handle
@@ -20,6 +20,9 @@ class pelibimport():
             sys.exit("The image is not Portable Executable")
         
     def libimports(self):
+        """
+        Set Field header
+        """
         setup = ("Offset", "Size of Offset", "LibraryName", "Value")
         self.Lib_List.append(setup)
         imagebase = self.get_imagebase()
@@ -63,6 +66,9 @@ class pelibimport():
             add_bytes+=20
              
     def get_imagebase(self):
+        """
+        returns imagebase offset from PE
+        """
         byte, realoffset = self.byte_handler(self.handle, 52, ctypes.sizeof(ctypes.c_uint32))
         intvalue = struct.unpack("<L", byte)[0]
         realoffset = hex(realoffset)
@@ -79,6 +85,9 @@ class pelibimport():
         return byte, realoffset    
     
     def find_import_section(self):
+        """
+        Retrieve section information form PE
+        """
         offset = offset = utils.coff_elfanew(self.handle)
         self.handle.seek(offset+0x06, 0)
         byte = self.handle.read(0x02)
@@ -106,7 +115,9 @@ class pelibimport():
                     for char in byte:
                         if char>0:
                             section+=chr(char)
-                   
+                    """
+                    Assume import lib resorts in .idata section
+                    """
                     if section == ".idata":
                         virtadd = realoffset+12
                         self.handle.seek(virtadd, 0)

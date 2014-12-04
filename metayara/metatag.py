@@ -1,4 +1,7 @@
 import ctypes
+"""
+Structures for byte information
+"""
 
 tag_pe = [('Machine;',             0x14c,       'IMAGE_FILE_MACHINE_I386'                   ),
           ('Machine;',             0x0200,      'IMAGE_FILE_MACHINE_IA64'                   ),
@@ -233,7 +236,7 @@ _SECTION_FLAG = [('IMAGE_SCN_TYPE_DSECT'),
                  ('IMAGE_SCN_MEM_WRITE')]
 
 
-_ELF_SECTION_HEADER = [('Magic Number;'                 ,   0,   ctypes.c_uint32,       'L'),
+_ELF_SECTION_HEADER = [('Magic Number;'             ,   0,   ctypes.c_uint32,       'L'),
                    ('Class'                         ,   4,   ctypes.c_byte,         'B'),
                    ('Endianess'                     ,   5,   ctypes.c_byte,         'B'),
                    ('Version'                       ,   6,   ctypes.c_byte,         'B'),
