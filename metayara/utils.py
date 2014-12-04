@@ -61,13 +61,43 @@ def ctypes_convert(stringtype):
 def get_elf_programheader_number(handle):
     handle.seek(44, 0)
     data = handle.read(2)
-    data = struct.unpack("H", data)[0]
+    endian = get_endianess(handle)
+    data = struct.unpack((endian + "H"), data)[0]
     return data
 
 def get_elf_programheader_entry(handle):
     handle.seek(28, 0)
+    data = handle.read(4)
+    endian = get_endianess(handle)
+    data = struct.unpack((endian + "L"), data)[0]
+    return data
+
+def get_elf_section_entry(handle):
+    handle.seek(32, 0)
+    data = handle.read(4)
+    endian = get_endianess(handle)
+    data = struct.unpack((endian + "L"), data)[0]
+    return data
+
+def get_elf_section_entry_size(handle):
+    handle.seek(46, 0)
     data = handle.read(2)
-    data = struct.unpack("H", data)[0]
+    endian = get_endianess(handle)
+    data = struct.unpack((endian + "H"), data)[0]
+    return data
+
+def get_elf_section_count(handle):
+    handle.seek(48, 0)
+    data = handle.read(2)
+    endian = get_endianess(handle)
+    data = struct.unpack((endian + "H"), data)[0]
+    return data
+
+def get_elf_shtrtable_index(handle):
+    handle.seek(50, 0)
+    data = handle.read(2)
+    endian = get_endianess(handle)
+    data = struct.unpack((endian + "H"), data)[0]
     return data
 
 def get_endianess(handle):

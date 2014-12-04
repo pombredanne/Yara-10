@@ -305,6 +305,18 @@ _ELF_PROGRAMHEADER_TYPE = [(0,               'NULL'         ),
                            (1685382481,      'GNU_STACK'    )]
 
 
+_ELF_SECTIONHEADER = [ ('Name;',                0,   ctypes.c_uint32,   'L'),
+                       ('Type;',                4,   ctypes.c_uint32,   'L'),
+                       ('Flags;',               8,   ctypes.c_uint32,   'L'),
+                       ('Virtual Addr;',        12,  ctypes.c_uint32,   'L'),
+                       ('Offset;',              16,  ctypes.c_uint32,   'L'),
+                       ('Size;',                20,  ctypes.c_uint32,   'L'),
+                       ('Link;',                24,  ctypes.c_uint32,   'L'),
+                       ('Info;',                28,  ctypes.c_uint32,   'L'),
+                       ('Addralign;',           24,  ctypes.c_uint32,   'L'),
+                       ('Entsize;',             24,  ctypes.c_uint32,   'L'),]
+
+
 _ELF_SECTION_HEADER_TYPE = [('SHT_NULL',    0),
                             ('SHT_PROGBITS',0),
                             ('SHT_SYMTAB',  0),
