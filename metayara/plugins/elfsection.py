@@ -2,6 +2,7 @@ from metayara import utils
 from metayara.metatag import _ELF_SECTIONHEADER
 import ctypes
 import struct
+import sys
 
 class elfsection():
     """
@@ -15,8 +16,6 @@ class elfsection():
         
         
     def elf_section(self):
-        
-        
         sectionsize = utils.get_elf_section_entry_size(self.handle)
         sectioncount = utils.get_elf_section_count(self.handle)
         additional_bytes = int()
@@ -33,9 +32,9 @@ class elfsection():
                 insert.append(hexvalue)
             
             self.ELF_Section.append(insert)
-        
-            
+
     def set_field_header(self):
+        
         setup = ("Name", "Type", "Flags", "Virtual Address", "Offset", "Size", "Link", "Info", "Addralign", "Entsize")
         self.ELF_Section.append(setup)    
         
