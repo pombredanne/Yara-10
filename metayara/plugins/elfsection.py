@@ -38,7 +38,9 @@ class elfsection():
                     for item in _ELF_SECTION_HEADER_TYPE:  
                         if hex(item[1]) == hexvalue:
                             insert.append(item[0])
+                            
                 else:
+                
                     insert.append(hexvalue)
                 
             
