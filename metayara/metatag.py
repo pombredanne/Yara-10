@@ -1,6 +1,7 @@
 import ctypes
+
 """
-Structures for byte information
+Structures
 """
 
 tag_pe = [('Machine;',             0x14c,       'IMAGE_FILE_MACHINE_I386'                   ),
@@ -320,19 +321,21 @@ _ELF_SECTIONHEADER = [ ('Name;',                0,   ctypes.c_uint32,   'L'),
                        ('Entsize;',             24,  ctypes.c_uint32,   'L'),]
 
 
-_ELF_SECTION_HEADER_TYPE = [('SHT_NULL',    0),
-                            ('SHT_PROGBITS',0),
-                            ('SHT_SYMTAB',  0),
-                            ('SHT_STRTAB',  0),
-                            ('SHT_RELA',    0),
-                            ('SHT_HASH',    0),
-                            ('SHT_DYNAMIC', 0),
-                            ('SHT_NOTE',    0),
-                            ('SHT_NOBITS',  0),
-                            ('SHT_REL',     0),
-                            ('SHT_SHLIB',   0),
-                            ('SHT_DYNSYM',  0),
-                            ('SHT_LOPROC',  0x70000000),
-                            ('SHT_HIPROC',  0x7fffffff),
-                            ('SHT_LOUSER',  0x80000000),
-                            ('SHT_HIUSER',  0xffffffff),]
+_ELF_SECTION_HEADER_TYPE = [('NULL',    0),
+                            ('PROGBITS',1),
+                            ('SYMTAB',  2),
+                            ('STRTAB',  3),
+                            ('RELA',    4),
+                            ('HASH',    5),
+                            ('DYNAMIC', 6),
+                            ('NOTE',    7),
+                            ('NOBITS',  8),
+                            ('REL',     9),
+                            ('SHLIB',   0xa),
+                            ('DYNSYM',  0xb),
+                            ('LOPROC',  0x70000000),
+                            ('HIPROC',  0x7fffffff),
+                            ('LOUSER',  0x80000000),
+                            ('HIUSER',  0xffffffff),
+                            ('VERSYM',  0x6fffffff),
+                            ('VERNEED', 0x6ffffffe)]

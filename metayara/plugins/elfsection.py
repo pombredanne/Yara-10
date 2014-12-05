@@ -1,5 +1,5 @@
 from metayara import utils
-from metayara.metatag import _ELF_SECTIONHEADER
+from metayara.metatag import _ELF_SECTIONHEADER, _ELF_SECTION_HEADER_TYPE
 import ctypes
 import struct
 import sys
@@ -29,12 +29,18 @@ class elfsection():
             if x> 0:
                 additional_bytes+= sectionsize
             
-            for name, seek, read, pack in _ELF_SECTIONHEADER:
-                
+            for name, seek, read, pack in _ELF_SECTIONHEADER:   
                 byte, realoffset = self.byte_handler(self.handle, (seek+additional_bytes), ctypes.sizeof(read))
                 integer = struct.unpack((endian+ pack), byte)[0]
                 hexvalue = hex(integer)
-                insert.append(hexvalue)
+                
+                if name == 'Type;':
+                    for item in _ELF_SECTION_HEADER_TYPE:  
+                        if hex(item[1]) == hexvalue:
+                            insert.append(item[0])
+                else:
+                    insert.append(hexvalue)
+                
             
             self.ELF_Section.append(insert)
 
