@@ -37,12 +37,31 @@ class elfheader():
         
     def elf_file(self, handle):
         """
-        Retrieve Elf header 
+        Retrieve endian
         """
         endian = utils.get_endianess(handle)
+        """
+        Check bit version
+        """
+        version = utils.get_elf_bitversion(handle)
+        additonalbyte = 0
         for name, seek ,read, pack in _ELF_SECTION_HEADER:
-            
-            byte, realoffset = self.byte_handler(handle, seek, ctypes.sizeof(read))
+            if version == 64:
+                if name in ("Entry Point", "Entry Program Headers", "Entry Section Header"):
+                    if name == 'Entry Point':
+                        read=ctypes.c_uint64
+                        pack+="L"
+                    if name == "Entry Program Headers":
+                        seek+=4
+                        read=ctypes.c_uint64
+                        pack+="L"
+                    if name == "Entry Section Header":
+                        seek+=8
+                        read=ctypes.c_uint64
+                        pack+="L"
+                        additonalbyte = 12
+                        
+            byte, realoffset = self.byte_handler(handle, additonalbyte+seek, ctypes.sizeof(read))
             integer = struct.unpack((endian+pack), byte)[0]
             hexvalue = hex(integer)
             realoffset = hex(realoffset)

@@ -140,4 +140,13 @@ def get_endianess(handle):
     elif data == 2:
         return '>'
         
+def get_elf_bitversion(handle):
+    endian = get_endianess(handle)
+    handle.seek(4, 0)
+    version = handle.read(1)
+    version = struct.unpack(endian + "B", version)[0]
+    if version == 1:
+        return 32
+    else:
+        return 64
     

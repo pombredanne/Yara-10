@@ -29,7 +29,7 @@ class elfprogramheader():
         """
         programheadernumber = utils.get_elf_programheader_number(self.handle)
         endianess = utils.get_endianess(self.handle)
-        sectionheader_size = 32
+        sectionheader_size = utils.get_elf_section_entry_size(self.handle)
         additional_bytes = int()
         
         for x in range(programheadernumber):
@@ -65,6 +65,7 @@ class elfprogramheader():
                 else:
                     if additional_bytes > 0:
                         seek+=additional_bytes
+                        
                     byte, realoffset = self.multiple_byte_handler_elf(self.handle, seek , ctypes.sizeof(read))
                     intvalue = struct.unpack(endianess+pack, byte)[0]
                     hexvalue = hex(intvalue)

@@ -75,8 +75,6 @@ def Process(cmd, filename):
     """
     Execute commands from parser option
     """
-    
-    
     print("Executing command:", cmd, "\n")
     type = utils.get_type(filename)
     print("Reading file:", filename)
