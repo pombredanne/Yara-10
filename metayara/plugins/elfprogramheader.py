@@ -1,4 +1,4 @@
-from metayara.metatag import _ELF_PROGRAM_HEADER, _ELF_PROGRAMHEADER_TYPE
+from metayara.metatag import _ELF_PROGRAM_HEADER, _ELF_PROGRAM_HEADER_64, _ELF_PROGRAMHEADER_TYPE
 import struct
 import ctypes
 from _struct import pack
@@ -29,8 +29,14 @@ class elfprogramheader():
         """
         programheadernumber = utils.get_elf_programheader_number(self.handle)
         endianess = utils.get_endianess(self.handle)
-        sectionheader_size = utils.get_elf_section_entry_size(self.handle)
+        sectionheader_size = utils.get_elf_programheader_entry_size(self.handle)
         additional_bytes = int()
+        
+        version = utils.get_elf_bitversion(self.handle)
+        if version == 32:
+            ELF_Header = _ELF_PROGRAM_HEADER
+        if version == 64:
+            ELF_Header = _ELF_PROGRAM_HEADER_64
         
         for x in range(programheadernumber):
             
@@ -40,7 +46,7 @@ class elfprogramheader():
                 """
                 additional_bytes+= sectionheader_size
                 
-            for name, seek, read, pack in _ELF_PROGRAM_HEADER:
+            for name, seek, read, pack in ELF_Header:
                 """
                 Retrieve ELF Program header
                 """

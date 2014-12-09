@@ -71,51 +71,127 @@ def get_elf_programheader_number(handle):
     """
     Retrieve Number of Program headers 
     """
-    handle.seek(44, 0)
-    data = handle.read(2)
-    endian = get_endianess(handle)
-    data = struct.unpack((endian + "H"), data)[0]
-    return data
+    version = get_elf_bitversion(handle)
+    
+    if version == 32:
+        handle.seek(44, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
+    
+    if version == 64:
+        handle.seek(56, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
+        
 
 def get_elf_programheader_entry(handle):
     """
     Retrieve Entry Program Headers
     """
-    handle.seek(28, 0)
-    data = handle.read(4)
-    endian = get_endianess(handle)
-    data = struct.unpack((endian + "L"), data)[0]
-    return data
+    version = get_elf_bitversion(handle)
+    
+    if version == 32:
+        handle.seek(28, 0)
+        data = handle.read(4)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "L"), data)[0]
+        return data
+    
+    if version == 64:
+        handle.seek(32, 0)
+        data = handle.read(8)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "LL"), data)[0]
+        return data
+    
+    
+def get_elf_programheader_entry_size(handle):
+    
+    version = get_elf_bitversion(handle)
+    
+    if version == 32:
+        handle.seek(42, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
+    
+    if version == 64:
+        handle.seek(54, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
 
 def get_elf_section_entry(handle):
     """
     Retrieve Entry Section Header
     """
-    handle.seek(32, 0)
-    data = handle.read(4)
-    endian = get_endianess(handle)
-    data = struct.unpack((endian + "L"), data)[0]
-    return data
+    
+    version = get_elf_bitversion(handle)
+    if version == 32:
+        
+        handle.seek(32, 0)
+        data = handle.read(4)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "L"), data)[0]
+        return data
+    
+    if version == 64:
+        
+        handle.seek(40, 0)
+        data = handle.read(8)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "LL"), data)[0]
+        return data
 
 def get_elf_section_entry_size(handle):
     """
     Retrieve Size of Section header
     """
-    handle.seek(46, 0)
-    data = handle.read(2)
-    endian = get_endianess(handle)
-    data = struct.unpack((endian + "H"), data)[0]
-    return data
+    
+    version = get_elf_bitversion(handle)
+    if version == 32:
+    
+        handle.seek(46, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
+    if version == 64:
+        
+        handle.seek(58, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
+        
 
 def get_elf_section_count(handle):
     """
     Retrieve Number ofSection header
     """
-    handle.seek(48, 0)
-    data = handle.read(2)
-    endian = get_endianess(handle)
-    data = struct.unpack((endian + "H"), data)[0]
-    return data
+    
+    version = get_elf_bitversion(handle)
+    if version == 32:
+        
+        handle.seek(48, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
+    
+    if version == 64:
+        
+        handle.seek(60, 0)
+        data = handle.read(2)
+        endian = get_endianess(handle)
+        data = struct.unpack((endian + "H"), data)[0]
+        return data
 
 def get_elf_shtrtable_index(handle):
     """

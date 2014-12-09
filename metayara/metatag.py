@@ -295,6 +295,15 @@ _ELF_PROGRAM_HEADER = [('Type;',                0,   ctypes.c_uint32,   'L'),
                        ('Flags;',               24,  ctypes.c_uint32,   'L'),
                        ('Alignment;',           28,  ctypes.c_uint32,   'L')]
 
+_ELF_PROGRAM_HEADER_64 = [('Type;',                0,   ctypes.c_uint32,   'L'),
+                          ('Flags;',               4,   ctypes.c_uint32,   'L'),
+                          ('Offset;',              8,   ctypes.c_uint64,   'LL'),
+                          ('Virt Addr;',           16,  ctypes.c_uint64,   'LL'),
+                          ('PAddr Reserved;',      24,  ctypes.c_uint64,   'LL'),
+                          ('FileSize;',            32,  ctypes.c_uint64,   'LL'),
+                          ('MemoreySize;',         40,  ctypes.c_uint64,   'LL'),
+                          ('Alignment;',           48,  ctypes.c_uint64,   'LL')]
+
 _ELF_PROGRAMHEADER_TYPE = [(0,               'NULL'         ),
                            (1,               'LOAD'         ),
                            (2,               'DYNAMIC'      ),
@@ -306,7 +315,9 @@ _ELF_PROGRAMHEADER_TYPE = [(0,               'NULL'         ),
                            (1879048192,      'LORPOC'       ),
                            (2147483647,      'HIPROC'       ),
                            (1685382480,      'GNU_EH_FRAME' ),
-                           (1685382481,      'GNU_STACK'    )]
+                           (1685382481,      'GNU_STACK'    ),
+                           (1685382482,      'GNU_RELRO'    ),
+                           (1694766464,      'PAX_FLAGS'    ),]
 
 
 _ELF_SECTIONHEADER = [ ('Name;',                0,   ctypes.c_uint32,   'L'),
@@ -320,8 +331,20 @@ _ELF_SECTIONHEADER = [ ('Name;',                0,   ctypes.c_uint32,   'L'),
                        ('Addralign;',           24,  ctypes.c_uint32,   'L'),
                        ('Entsize;',             24,  ctypes.c_uint32,   'L'),]
 
+_ELF_SECTIONHEADER_64 = [   ('Name;',                0,   ctypes.c_uint32,   'L'),
+                            ('Type;',                4,   ctypes.c_uint32,   'L'),
+                            ('Flags;',               8,   ctypes.c_uint64,   'LL'),
+                            ('Virtual Addr;',        16,  ctypes.c_uint64,   'LL'),
+                            ('Offset;',              24,  ctypes.c_uint64,   'LL'),
+                            ('Size;',                32,  ctypes.c_uint64,   'LL'),
+                            ('Link;',                36,  ctypes.c_uint32,   'L'),
+                            ('Info;',                40,  ctypes.c_uint32,   'L'),
+                            ('Addralign;',           44,  ctypes.c_uint64,   'LL'),
+                            ('Entsize;',             52,  ctypes.c_uint64,   'LL'),]
+
 
 _ELF_SECTION_HEADER_TYPE = [('NULL',    0),
+                            ('GNU_HASH',  0x2),
                             ('PROGBITS',1),
                             ('SYMTAB',  2),
                             ('STRTAB',  3),
@@ -339,4 +362,4 @@ _ELF_SECTION_HEADER_TYPE = [('NULL',    0),
                             ('LOUSER',  0x80000000),
                             ('HIUSER',  0xffffffff),
                             ('VERSYM',  0x6fffffff),
-                            ('VERNEED', 0x6ffffffe)]
+                            ('VERNEED', 0x6ffffffe),]

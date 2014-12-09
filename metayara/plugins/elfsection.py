@@ -1,5 +1,5 @@
 from metayara import utils
-from metayara.metatag import _ELF_SECTIONHEADER, _ELF_SECTION_HEADER_TYPE
+from metayara.metatag import _ELF_SECTIONHEADER, _ELF_SECTIONHEADER_64, _ELF_SECTION_HEADER_TYPE
 import ctypes
 import struct
 import sys
@@ -24,12 +24,18 @@ class elfsection():
         endian = utils.get_endianess(self.handle)
         additional_bytes = int()
         
+        version = utils.get_elf_bitversion(self.handle)
+        if version == 32:
+            ELF_Header = _ELF_SECTIONHEADER
+        if version == 64:
+            ELF_Header = _ELF_SECTIONHEADER_64
+        
         for x in range(sectioncount):
             insert = []
             if x> 0:
                 additional_bytes+= sectionsize
             
-            for name, seek, read, pack in _ELF_SECTIONHEADER:   
+            for name, seek, read, pack in ELF_Header:   
                 byte, realoffset = self.byte_handler(self.handle, (seek+additional_bytes), ctypes.sizeof(read))
                 integer = struct.unpack((endian+ pack), byte)[0]
                 hexvalue = hex(integer)
@@ -50,8 +56,13 @@ class elfsection():
         """
         Set field header
         """
-        setup = ("Name", "Type", "Flags", "Virtual Address", "Offset", "Size", "Link", "Info", "Addralign", "Entsize")
-        self.ELF_Section.append(setup)    
+        version = utils.get_elf_bitversion(self.handle)
+        if version == 32:
+            setup = ("Name", "Type", "Flags", "Virtual Address", "Offset", "Size", "Link", "Info", "Addralign", "Entsize")
+            self.ELF_Section.append(setup)    
+        if version == 64:
+            setup = ("Name", "Type", "Flags", "Virtual Address", "Offset", "Size", "Link", "Info", "Addralign", "Entsize")
+            self.ELF_Section.append(setup)    
         
     def byte_handler(self, handle, seek, read):
         """
