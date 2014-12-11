@@ -363,3 +363,61 @@ _ELF_SECTION_HEADER_TYPE = [('NULL',    0),
                             ('HIUSER',  0xffffffff),
                             ('VERSYM',  0x6fffffff),
                             ('VERNEED', 0x6ffffffe),]
+
+_MACHO_HEADER_64 = [('Magic;',               0,   ctypes.c_uint32,   'L'),
+                    ('Type;',                4,   ctypes.c_uint32,   'L'),
+                    ('Subtype;',             8,   ctypes.c_uint32,   'L'),
+                    ('Filetype;',            12,   ctypes.c_uint32,   'L'),
+                    ('LoadCOmmandsNumber;',  16,   ctypes.c_uint32,   'L'),
+                    ('SizeofCommands;',      20,   ctypes.c_uint32,   'L'),
+                    ('Flags;',               24,   ctypes.c_uint32,   'L'),
+                    ('Reserved;',            28,   ctypes.c_uint32,   'L'),]
+
+
+_MACHO_HEADER_64_INFO = [('Magic;', 0xfeedfacf,       'Magic 64'),
+                         ('Magic;', 0xcffaedfe,       'CIGAM 64'),
+                         
+                         ('Magic;', 0xfeedface,       'CIGAM 64'),
+                         ('Magic;', 0xcefaedfe,       'CIGAM 64'),
+                         
+                         ('Filetype;', 0x1,       'Object'),
+                         ('Filetype;', 0x2,       'Execute'),
+                         ('Filetype;', 0x3,       'VM shared lib'),
+                         ('Filetype;', 0x4,       'Core file'),
+                         ('Filetype;', 0x5,       'Preload executable'),
+                         ('Filetype;', 0x6,       'Dyanmic bound shared lib'),
+                         ('Filetype;', 0x7,       'Dynamic link editor'),
+                         ('Filetype;', 0x8,       'Dynamic bound bundle'),
+                         ('Filetype;', 0x9,       'Shared lib stub'),
+                         ('Filetype;', 0xa,       'Companion debug only'),
+                         ('Filetype;', 0xb,       'x86_x64 kexts'),]
+                            
+                            
+_MACHO_FLAGS = [       ('MH_NOUNDEFS',           'the object file has no undefined references'), 
+                       ('MH_INCRLINK',          'Object file is output of increment link against base file'),
+                       ('MH_DYLDLINK',        'Object file is input for the dynamic linker'),
+                       ('MH_BINDATLOAD',       'Object file is undefined references are bound by dynamic linker when loaded'),
+                       ('MH_PREBOUND',        'The file has its dynamic undefined references prebound'),
+                       ('MH_SPLIT_SEGS',      'the file has its read-only and read-write segments split'),
+                       ('MH_LAZY_INIT',                             'The shared libary init routine its to be run via chating memory faults '),
+                       ('MH_TWOLEVEL',         'the image is using two-level name space bindings'),
+                       ('MH_FORCE_FLAT',             'the executable is forcing all images to use flag name space bindings'),
+                       ('MH_NOMULTIDEFS',            'this umbrealla guarantees no multiple defintioins of symbols'),
+                       ('MH_NOFIXPREBINDING',  'do not have dyld notify the prebinding agent about this executable'),
+                       ('MH_PREBINDABLE',         'the binary is not prebound but can have its prebinding redone'),
+                       ('MH_ALLMODSBOUND',                    'Indicates that this library binds to all two level namespaces modules of its dependent libraries'),
+                       ('MH_SUBSECTIONS_VIA_SYMBOLS',                       'safe to divide up the sections into sub-sections'),
+                       ('MH_CANONICAL',            'the binary has been canonicalized via unprebind operatino'),
+                       ('MH_WEAK_DEFINES',         'the final linked image contains external weak symbols'),
+                       ('MH_BINDS_TO_WEAK',           'the final linked image uses weak symbols.'), 
+                       ('MH_ALLOW_STACK_EXECUTION',          'all stacks in the task will be given stack execution privilege'),
+                       ('MH_ROOT_SAFE',        'the binary declares it is safe for use in processes with uid zero'),
+                       ('MH_SETUID_SAFE',       'the binary declares it is safe for use in processes when itsetguid is true'),
+                       ('MH_NO_REEXPORTED_DYLIBS',        'static linker does not ned to examine depent dylibs'),
+                       ('MH_PIE',      'OS will load the main executable at a random address'),
+                       ('MH_DEAD_STRIPPABLE_DYLIB',                             'static linker will automatically not create LC_LOAD_DYLIB'),
+                       ('MH_HAS_TLV_DESCRIPTORS',         'Contains a section type S_THREAD_LOCAL_VARIABLES'),
+                       ('MH_NO_HEAP_EXECUTION',           'OS will run the main executable with a non-executable heap'), 
+                       ('MH_APP_EXTENSION_SAFE',          'Code was linked for use in an application extension'),]
+                            
+                            

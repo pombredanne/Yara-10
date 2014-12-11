@@ -15,7 +15,6 @@ class pesection():
         self.set_field_header()
         self.pe_section()
         
-        
     def is_pe(self, handle):
         check = utils.check_pe(handle)
         if check is False:

@@ -43,6 +43,8 @@ def plugin_description():
                 match = match.strip("['>>]").strip()
                 plugindescription[plugin] = match
                
+        file.close()
+        
     return plugindescription
     
 def Output_data(container): 
@@ -105,6 +107,8 @@ def Process(cmd, filename):
         sys.exit()
     else:
         Output_data(container)
+        
+    handle.close()
             
 def main():
     """
