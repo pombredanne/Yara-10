@@ -239,6 +239,6 @@ def get_elf_bitversion(handle):
 def get_macho_loadcommands_64(handle):
     handle.seek(16, 0)
     data = handle.read(4)   
-    data = struct.unpack("L", data)[0]
+    data = struct.unpack("<L", data)[0]
     return data
     

@@ -57,7 +57,7 @@ class macholoadcommands():
         for x in range(loadcommands):
             handle.seek(start_offset, 0)
             cmd = handle.read(4)
-            cmd = struct.unpack("L", cmd)[0]
+            cmd = struct.unpack("<L", cmd)[0]
             command = 'Command'
             set_optional_field = self.check_tags(command, hex(cmd))
             insert = (hex(start_offset), utils.ctypes_convert(ctypes.c_uint32), command, cmd, hex(cmd), set_optional_field)  
@@ -67,7 +67,7 @@ class macholoadcommands():
             
             handle.seek(start_offset+4, 0)
             cmdsize = handle.read(4)
-            cmdsize = struct.unpack("L", cmdsize)[0]
+            cmdsize = struct.unpack("<L", cmdsize)[0]
             
             insert = (hex(start_offset+4), utils.ctypes_convert(ctypes.c_uint32), 'CommandSize', cmdsize, hex(cmdsize), ".")          
             self.MachO_List.append(insert) 
@@ -83,7 +83,7 @@ class macholoadcommands():
                 
                 for name, seek, read, pack in _MACHO_LC_SEGMENT_64:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -96,7 +96,7 @@ class macholoadcommands():
                 
                 for name, seek, read, pack in _MACHO_LC_DYLD_INFO_ONLY:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -109,7 +109,7 @@ class macholoadcommands():
                 
                 for name, seek, read, pack in _MACHO_LC_SYMTAB:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -122,7 +122,7 @@ class macholoadcommands():
                 
                 for name, seek, read, pack in _MACHO_LC_DYSYMTAB:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -135,7 +135,7 @@ class macholoadcommands():
                 
                 handle.seek(start_offset+8)
                 data = handle.read(4)
-                data = struct.unpack("L", data)[0] 
+                data = struct.unpack("<L", data)[0] 
                 insert = (realoffset, utils.ctypes_convert(ctypes.c_uint32), "StringOffset", data, hex(data), ".")          
                 self.MachO_List.append(insert) 
                 
@@ -176,7 +176,7 @@ class macholoadcommands():
             elif cmd == '0x24':
                 for name, seek, read, pack in _MACHO_LC_VERSION_MIN_MACOSX:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -189,7 +189,7 @@ class macholoadcommands():
             
                 handle.seek(start_offset+8)         
                 data = handle.read(ctypes.sizeof(ctypes.c_uint64))
-                data = struct.unpack("Q", data)[0]
+                data = struct.unpack("<Q", data)[0]
                 insert = (realoffset, utils.ctypes_convert(ctypes.c_uint32), "Version", data, hex(data), ".")          
                 self.MachO_List.append(insert) 
                 clearline = (6 * ("",))
@@ -198,7 +198,7 @@ class macholoadcommands():
             elif cmd == '0x80000028':
                 for name, seek, read, pack in _MACHO_LC_MAIN:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -211,7 +211,7 @@ class macholoadcommands():
             elif cmd == '0xc':
                 for name, seek, read, pack in _MACHO_LC_LOAD_DYLIB:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -230,7 +230,7 @@ class macholoadcommands():
             elif cmd == '0x26':
                 for name, seek, read, pack in _MACHO_LC_LINKEDIT_DATA_COMMAND:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -243,7 +243,7 @@ class macholoadcommands():
             elif cmd == '0x29':
                 for name, seek, read, pack in _MACHO_LC_LINKEDIT_DATA_COMMAND:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -256,7 +256,7 @@ class macholoadcommands():
             elif cmd == '0x2b':
                 for name, seek, read, pack in _MACHO_LC_LINKEDIT_DATA_COMMAND:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
@@ -270,7 +270,7 @@ class macholoadcommands():
             elif cmd == '0x1d':
                 for name, seek, read, pack in _MACHO_LC_LINKEDIT_DATA_COMMAND:
                     byte, realoffset = self.byte_handler(handle, (seek+ start_offset), ctypes.sizeof(read))
-                    integer = struct.unpack(pack, byte)[0]
+                    integer = struct.unpack("<" + pack, byte)[0]
                     hexvalue = hex(integer)
                     realoffset = hex(realoffset)
             
