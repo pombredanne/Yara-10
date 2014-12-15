@@ -33,9 +33,7 @@ class machoheader():
             realoffset = hex(realoffset)
             set_optional_field = self.check_tags(name, hexvalue)
             insert = (realoffset, utils.ctypes_convert(read), name, integer, hexvalue, set_optional_field)
-            
-            
-                
+             
             self.MachO_List.append(insert) 
             
             if name == "Flags;":

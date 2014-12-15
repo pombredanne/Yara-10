@@ -66,6 +66,16 @@ def ctypes_convert(stringtype):
     match = re.findall(regex, offsetsize)
     match = str(match)
     return match[12:-3]
+
+def ctypes_convert_array(stringtype):
+    """
+    Convert ctypes to string for output
+    """
+    offsetsize = str(stringtype)
+    regex = re.compile("'.+'")
+    match = re.findall(regex, offsetsize)
+    match = str(match)
+    return match[12:-3]
     
 def get_elf_programheader_number(handle):
     """
@@ -225,4 +235,10 @@ def get_elf_bitversion(handle):
         return 32
     else:
         return 64
+    
+def get_macho_loadcommands_64(handle):
+    handle.seek(16, 0)
+    data = handle.read(4)   
+    data = struct.unpack("L", data)[0]
+    return data
     
