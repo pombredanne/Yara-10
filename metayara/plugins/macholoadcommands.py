@@ -53,7 +53,7 @@ class macholoadcommands():
     def MachO_LoadCommands(self, handle):
         loadcommands = utils.get_macho_loadcommands_64(handle)
         start_offset = 32
-        start_offset_cmdsize = 32
+        
         for x in range(loadcommands):
             handle.seek(start_offset, 0)
             cmd = handle.read(4)
@@ -168,7 +168,7 @@ class macholoadcommands():
                 uuid+='-'
                 uuid+=c[26:]
                 
-                insert = (realoffset, utils.ctypes_convert(ctypes.c_uint32 * 4), "UUID", "", uuid.upper(), ".")          
+                insert = (realoffset, utils.ctypes_convert(ctypes.c_uint32 * 4), "UUID", "", "", uuid.upper())          
                 self.MachO_List.append(insert) 
                 clearline = (6 * ("",))
                 self.MachO_List.append(clearline)   

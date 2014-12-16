@@ -163,7 +163,6 @@ def get_elf_section_entry_size(handle):
     """
     Retrieve Size of Section header
     """
-    
     version = get_elf_bitversion(handle)
     if version == 32:
     
@@ -185,7 +184,6 @@ def get_elf_section_count(handle):
     """
     Retrieve Number ofSection header
     """
-    
     version = get_elf_bitversion(handle)
     if version == 32:
         
@@ -227,6 +225,9 @@ def get_endianess(handle):
         return '>'
         
 def get_elf_bitversion(handle):
+    """
+    Check Bit version ELF header
+    """
     endian = get_endianess(handle)
     handle.seek(4, 0)
     version = handle.read(1)

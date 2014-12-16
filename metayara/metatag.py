@@ -29,7 +29,6 @@ tag_pe = [('Machine;',             0x14c,       'IMAGE_FILE_MACHINE_I386'       
           ('Machine;',             0x1a8,       'IMAGE_FILE_MACHINE_SH5'                    ),
           ('Machine;',             0x1c2,       'IMAGE_FILE_MACHINE_THUMB'                  ),
           ('Machine;',             0x169,       'IMAGE_FILE_MACHINE_WCEMIPSV2'              ),
-          
           ('Subystem;',            0,           'IMAGE_SUBSYSTEM_UNKNOWN'                   ),
           ('Subystem;',            1,           'IMAGE_SUBSYSTEM_NATIVE'                    ),
           ('Subsystem;',           2,           'IMAGE_SUBSYSTEM_WINDOWS_GUI'               ),
@@ -42,10 +41,9 @@ tag_pe = [('Machine;',             0x14c,       'IMAGE_FILE_MACHINE_I386'       
           ('Subystem;',            12,          'IMAGE_SUBSYSTEM_EFI_RUNTIME_DRIVER'        ),
           ('Subystem;',            13,          'IMAGE_SUBSYSTEM_EFI_ROM'                   ),
           ('Subystem;',            14,          'XBOX'                                      ),
-          
-          ('Magic;',               0x10b,      'IMAGE_NT_OPTIONAL_HDR32_MAGIC'             ),
-          ('Magic;',               0x20b,      'IMAGE_NT_OPTIONAL_HDR64_MAGIC+'            ),
-          ('Magic;',               0x107,      'IMAGE_ROM_OPTIONAL_HDR_MAGIC+'            ),]
+          ('Magic;',               0x10b,       'IMAGE_NT_OPTIONAL_HDR32_MAGIC'             ),
+          ('Magic;',               0x20b,       'IMAGE_NT_OPTIONAL_HDR64_MAGIC+'            ),
+          ('Magic;',               0x107,       'IMAGE_ROM_OPTIONAL_HDR_MAGIC+'             )]
        
 
 _DOS_HEADER_INFO = [('e_magic', 0x5A4D,       'MZ'),
@@ -389,8 +387,7 @@ _MACHO_HEADER_64_INFO = [('Magic;', 0xfeedfacf,       'Magic 64'),
                          ('Filetype;', 0x9,       'Shared lib stub'),
                          ('Filetype;', 0xa,       'Companion debug only'),
                          ('Filetype;', 0xb,       'x86_x64 kexts'),]
-                            
-                            
+                                   
 _MACHO_FLAGS = [       ('MH_NOUNDEFS',                          'the object file has no undefined references'), 
                        ('MH_INCRLINK',                          'Object file is output of increment link against base file'),
                        ('MH_DYLDLINK',                          'Object file is input for the dynamic linker'),
@@ -475,17 +472,22 @@ _MACHO_LC_SEGMENT_64 = [('VMaddr;',                 24,   ctypes.c_uint64,      
                         ('Nsects;',                 64,   ctypes.c_uint32,      'L'),
                         ('Flags;',                  68,   ctypes.c_uint32,      'L')]
 
-
 _MACHO_LC_SYMTAB = [('SymbolTableOffset;',          8,    ctypes.c_uint32,      'L'),
                     ('NumberSymbols;',              12,   ctypes.c_uint32,      'L'),
                     ('StringTableOffset;',          16,   ctypes.c_uint32,      'L'),
                     ('StringTableSize;',            20,   ctypes.c_uint32,      'L')]
 
+_MACHO_SYMTAB_STRUCT = [('StringTableIndex;',           0,    ctypes.c_uint32,      'L'),
+                        ('Type;',                       4,    ctypes.c_uint32,      'L'),
+                        ('SectionIndex;',               5,    ctypes.c_ubyte,       'B'),
+                        ('Description;',                6,    ctypes.c_ushort,      'H'),
+                        ('Value;',                      8,    ctypes.c_uint64,      'Q'),]
+
 _MACHO_LC_DYSYMTAB = [('LocSymbolIndex;',               8,    ctypes.c_uint32,      'L'),
                       ('LocSymbolNumber;',              12,   ctypes.c_uint32,      'L'),
                       ('ExternalDefinedSymbolsIndex;',  16,   ctypes.c_uint32,      'L'),
                       ('ExternalDefinedSymbolNumber;',  20,   ctypes.c_uint32,      'L'),
-                      ('Undefined SymbolIndex;',         24,   ctypes.c_uint32,      'L'),
+                      ('UndefinedSymbolIndex;',         24,   ctypes.c_uint32,     'L'),
                       ('UndefinedSymbolNumber;',        28,   ctypes.c_uint32,      'L'),
                       ('TableOfContentsOffset;',        32,   ctypes.c_uint32,      'L'),
                       ('TableOfContentsEntryNumber;',   36,   ctypes.c_uint32,      'L'),
@@ -500,17 +502,12 @@ _MACHO_LC_DYSYMTAB = [('LocSymbolIndex;',               8,    ctypes.c_uint32,  
                       ('LocalRelocationTableOffset;',   72,   ctypes.c_uint32,      'L'),
                       ('LocalRelocationTableEntries;',  76,   ctypes.c_uint32,      'L')]
 
-
-_MACHO_LC_LOAD_DYLIB = [    ('StrOffset;',              8,   ctypes.c_uint32,      'L'),
+_MACHO_LC_LOAD_DYLIB = [    ('StrOffset;',              8,   ctypes.c_uint32,       'L'),
                             ('TimeStamp;',              12,   ctypes.c_uint32,      'L'),
                             ('CurrentVersion;',         16,   ctypes.c_uint32,      'L'),
                             ('CompatibilityVersion;',   20,   ctypes.c_uint32,      'L')]
                             
-
-
-
-
-_MACHO_LC_DYLD_INFO_ONLY = [('RebaseOffset;',           8,   ctypes.c_uint32,      'L'),
+_MACHO_LC_DYLD_INFO_ONLY = [('RebaseOffset;',           8,   ctypes.c_uint32,       'L'),
                             ('RebaseSize;',             12,   ctypes.c_uint32,      'L'),
                             ('BindOffset;',             16,   ctypes.c_uint32,      'L'),
                             ('BindSize;',               20,   ctypes.c_uint32,      'L'),
@@ -521,16 +518,11 @@ _MACHO_LC_DYLD_INFO_ONLY = [('RebaseOffset;',           8,   ctypes.c_uint32,   
                             ('ExportOffset;',           40,   ctypes.c_uint32,      'L'),
                             ('ExportSize;',             44,   ctypes.c_uint32,      'L'),]
 
-_MACHO_LC_LOAD_UPWARD_DYLIB= []
-
-_MACHO_LC_VERSION_MIN_MACOSX = [('Version;',           8,   ctypes.c_uint32,      'L'),
-                                ('Reserved;',          12,  ctypes.c_uint32,      'L'),]
-
-
+_MACHO_LC_VERSION_MIN_MACOSX = [('Version;',           8,   ctypes.c_uint32,        'L'),
+                                ('Reserved;',          12,  ctypes.c_uint32,        'L'),]
 
 _MACHO_LC_MAIN = [('EntryOffset;',           8,   ctypes.c_uint32,      'L'),
-                  ('StackSize;',          12,  ctypes.c_uint32,      'L'),]
+                  ('StackSize;',            12,   ctypes.c_uint32,      'L'),]
 
 _MACHO_LC_LINKEDIT_DATA_COMMAND = [('DataOffset;',          8,   ctypes.c_uint32,      'L'),
                                    ('DataSize;',            12,  ctypes.c_uint32,      'L'),]
-
