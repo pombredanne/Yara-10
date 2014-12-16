@@ -484,12 +484,6 @@ _MACHO_SYMTAB_STRUCT = [('StringTableIndex;',           0,    ctypes.c_uint32,  
                         ('Value;',                      8,    ctypes.c_uint64,      'Q'),]
 
 
-
-_MACHO_SYMTAB_TYPE_INFO = [ ('e_magic', 0x5A4D,       'MZ'),
-                            ('e_magic', 0x454E,       'NE'),
-                            ('e_magic', 0x454C,       'LE'),
-                            ('e_magic', 0x00004550,   'PE00'),]
-
 _MACHO_LC_DYSYMTAB = [('LocSymbolIndex;',               8,    ctypes.c_uint32,      'L'),
                       ('LocSymbolNumber;',              12,   ctypes.c_uint32,      'L'),
                       ('ExternalDefinedSymbolsIndex;',  16,   ctypes.c_uint32,      'L'),
@@ -533,3 +527,15 @@ _MACHO_LC_MAIN = [('EntryOffset;',           8,   ctypes.c_uint32,      'L'),
 
 _MACHO_LC_LINKEDIT_DATA_COMMAND = [('DataOffset;',          8,   ctypes.c_uint32,      'L'),
                                    ('DataSize;',            12,  ctypes.c_uint32,      'L'),]
+
+
+_MACHO_DESCPITION_FLAGS = [        ('REFERENCE_FLAG_UNDEFINED_NON_LAZY',                          'the object file has no undefined references'), 
+                                   ('REFERENCE_FLAG_UNDEFINED_LAZY',                          'Object file is output of increment link against base file'),
+                                   ('REFERENCE_FLAG_DEFINED',                          'Object file is input for the dynamic linker'),
+                                   ('REFERENCE_FLAG_PRIVATE_DEFINED',                        'Object file is undefined references are bound by dynamic linker when loaded'),
+                                   ('REFERENCE_FLAG_PRIVATE_UNDEFINED_NON_LAZY',                          'The file has its dynamic undefined references prebound'),
+                                   ('REFERENCE_FLAG_PRIVATE_UNDEFINED_LAZY',                        'the file has its read-only and read-write segments split'),
+                                   ('REFERENCED_DYNAMICALLY ',                         'The shared libary init routine its to be run via chating memory faults '),
+                                   ('N_DESC_DISCARDED ',                          'the image is using two-level name space bindings'),
+                                   ('N_WEAK_REF',                        'the executable is forcing all images to use flag name space bindings'),
+                                   ('N_WEAK_DEF',                       'this umbrealla guarantees no multiple defintioins of symbols')]

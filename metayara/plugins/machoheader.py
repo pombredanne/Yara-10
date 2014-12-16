@@ -39,6 +39,7 @@ class machoheader():
             if name == "Flags;":
                 set_char_flag = (name, integer)
                 self.set_char_flags(set_char_flag, _MACHO_FLAGS)
+                
     def set_char_flags(self, flag, flag_list):
         """
         Returns Flags from search list

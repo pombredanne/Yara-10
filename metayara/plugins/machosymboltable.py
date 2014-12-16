@@ -2,6 +2,7 @@ from metayara import utils
 import struct
 import ctypes
 from metayara.metatag import _MACHO_SYMTAB_STRUCT
+from metayara.metatag import _MACHO_DESCPITION_FLAGS
 
 
 class machosymboltable():
@@ -46,6 +47,7 @@ class machosymboltable():
             optional = '.'
             return optional
         
+   
      
     def MachO_SymbolTable(self, handle):
         SymtblOffset, SymtblNmbr, StrtblOffset, StrtblNmbr = self.get_MachO_TableOffsets(handle)
@@ -60,30 +62,52 @@ class machosymboltable():
                 set_optional_field = '.'
                 if name == 'StringTableIndex;':
                     set_optional_field = self.get_string(handle, name, intvalue, StrtblOffset)
+                    
+                if name == "Description;":
+                    set_char_flag = (name, intvalue)
+                    self.set_char_flags(set_char_flag, _MACHO_DESCPITION_FLAGS)
                 
-                elif name == 'Type;':
-                    set_optional_field = self.check_tags(name, hexvalue)
                     
                 insert = (realoffset, utils.ctypes_convert(read), name, intvalue, hexvalue, set_optional_field)          
                 self.MachO_SymTable_List.append(insert) 
                     
             clearline = (7 * ("",))
             self.MachO_SymTable_List.append(clearline)
+            stripeline = (7 * ("////--",))
+            self.MachO_SymTable_List.append(stripeline)
             SymtblOffset+=16 #Size of SymbolTable Entries
     
     
-            
-    def check_tags(self, field, hexvalue):
-        """
-        Check for tags in metatag.tag
-        """
-        for item in _DOS_HEADER_INFO:
-            if field is item[0]:
-                if hexvalue == hex(item[1]):
-                    return item[2]
                             
         optional = '.'
-        return optional        
+        return optional     
+    
+    def set_char_flags(self, flag, flag_list):
+        """
+        Returns Flags from search list
+        """
+        clearline = (6 * ("",))
+        
+        name, intvalue = flag
+        binary_value = ('{:010b}'.format(intvalue))
+            
+        counter = 0
+        for flag in reversed(binary_value):
+            flag = int(flag)
+                
+            if flag == True:
+                    
+                flag_name, flag_description = flag_list[counter]
+                flag_name = flag_name
+                flag_description = flag_description
+                flag_set = "TRUE"
+            
+                
+                insert = (" ", " ", "FLAG", flag_name, flag_set, flag_description)
+                
+                self.MachO_SymTable_List.append(insert)
+                counter+=1
+        
             
     def byte_handler(self, handle, seek, read):
         """
