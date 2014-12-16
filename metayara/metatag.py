@@ -483,6 +483,13 @@ _MACHO_SYMTAB_STRUCT = [('StringTableIndex;',           0,    ctypes.c_uint32,  
                         ('Description;',                6,    ctypes.c_ushort,      'H'),
                         ('Value;',                      8,    ctypes.c_uint64,      'Q'),]
 
+
+
+_MACHO_SYMTAB_TYPE_INFO = [ ('e_magic', 0x5A4D,       'MZ'),
+                            ('e_magic', 0x454E,       'NE'),
+                            ('e_magic', 0x454C,       'LE'),
+                            ('e_magic', 0x00004550,   'PE00'),]
+
 _MACHO_LC_DYSYMTAB = [('LocSymbolIndex;',               8,    ctypes.c_uint32,      'L'),
                       ('LocSymbolNumber;',              12,   ctypes.c_uint32,      'L'),
                       ('ExternalDefinedSymbolsIndex;',  16,   ctypes.c_uint32,      'L'),

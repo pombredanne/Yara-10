@@ -28,7 +28,7 @@ class machoheader():
         """
         for name, seek, read, pack in _MACHO_HEADER_64:
             byte, realoffset = self.byte_handler(self.handle, seek, ctypes.sizeof(read))
-            integer = struct.unpack(pack, byte)[0]
+            integer = struct.unpack("<" + pack, byte)[0]
             hexvalue = hex(integer)
             realoffset = hex(realoffset)
             set_optional_field = self.check_tags(name, hexvalue)

@@ -57,16 +57,33 @@ class machosymboltable():
                 intvalue = struct.unpack("<" + pack, byte)[0]
                 hexvalue = hex(intvalue)
                 realoffset = hex(realoffset)
-                set_optional_field = self.get_string(handle, name, intvalue, StrtblOffset)
+                set_optional_field = '.'
+                if name == 'StringTableIndex;':
+                    set_optional_field = self.get_string(handle, name, intvalue, StrtblOffset)
                 
+                elif name == 'Type;':
+                    set_optional_field = self.check_tags(name, hexvalue)
+                    
                 insert = (realoffset, utils.ctypes_convert(read), name, intvalue, hexvalue, set_optional_field)          
                 self.MachO_SymTable_List.append(insert) 
                     
             clearline = (7 * ("",))
             self.MachO_SymTable_List.append(clearline)
-            SymtblOffset+=16
+            SymtblOffset+=16 #Size of SymbolTable Entries
+    
+    
             
-            
+    def check_tags(self, field, hexvalue):
+        """
+        Check for tags in metatag.tag
+        """
+        for item in _DOS_HEADER_INFO:
+            if field is item[0]:
+                if hexvalue == hex(item[1]):
+                    return item[2]
+                            
+        optional = '.'
+        return optional        
             
     def byte_handler(self, handle, seek, read):
         """

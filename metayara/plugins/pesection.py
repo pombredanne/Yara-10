@@ -81,6 +81,7 @@ class pesection():
                     insert = (realoffset, utils.ctypes_convert(read), str(), field, intvalue, hexvalue)
                     field_list.append(insert)  
                     local_counter = int()
+                    
                     if field == str("Characteristics;"):
                         bin_value = ('{:032b}'.format(intvalue))
                         clearline = (6 * ("",))
