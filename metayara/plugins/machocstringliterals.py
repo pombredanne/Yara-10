@@ -17,7 +17,7 @@ class machocstringliterals():
     
     
     def set_field_header(self):
-        setup = ("Cstring", "")
+        setup = ("CstringSize", "CstringIndex")
         
         self.MachO_Cstring_list.append(setup)
         
@@ -90,6 +90,13 @@ class machocstringliterals():
                                 else:
                                     data = data.decode('UTF-8')
                                     value+=data
+                                    if len(value) > 30:
+                                        insert = (len(value), value)
+                                        self.MachO_Cstring_list.append(insert)
+                                        value = str()
+                                        
+                                        
+                                    
                                 localcounter+=1
                         
                         start_offset+=SectionSize
