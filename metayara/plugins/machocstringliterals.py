@@ -83,17 +83,20 @@ class machocstringliterals():
                                 data = handle.read(1)
                                 if data == b'\x00':
                                     optionalfield = value
-                                    value = str()
-                                    insert = (optionalfield, " ")
+                                    insert = (len(optionalfield), optionalfield)
                                     self.MachO_Cstring_list.append(insert)
-                                    
+                                    value = str()
                                 else:
-                                    data = data.decode('UTF-8')
-                                    value+=data
-                                    if len(value) > 30:
+                                    if len(value) > 64:
                                         insert = (len(value), value)
                                         self.MachO_Cstring_list.append(insert)
                                         value = str()
+                                    for item in data:
+                                        data = chr(item)
+                                        data = data.lstrip()
+                                        data = data.rstrip()
+                                        value+=data
+                                    
                                         
                                         
                                     
