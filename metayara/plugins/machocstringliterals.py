@@ -88,6 +88,7 @@ class machocstringliterals():
                                     value = str()
                                 else:
                                     if len(value) > 64:
+                                        value+=" "
                                         insert = (len(value), value)
                                         self.MachO_Cstring_list.append(insert)
                                         value = str()
@@ -95,6 +96,7 @@ class machocstringliterals():
                                         data = chr(item)
                                         data = data.lstrip()
                                         data = data.rstrip()
+                                        
                                         value+=data
                                     
                                         
