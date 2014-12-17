@@ -15,6 +15,7 @@ class machoheader():
         self.set_field_header()
         self.macho_file_header()
         
+        
     def set_field_header(self):
         """
         Set header list

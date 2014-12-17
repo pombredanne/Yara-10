@@ -78,7 +78,11 @@ def Process(cmd, filename):
     Execute commands from parser option
     """
     print("Executing command:", cmd, "\n")
-    type = utils.get_type(filename)
+    
+    
+    type = utils.get_filetype(filename)
+    
+    
     print("Reading file:", filename)
     print("MIMEtype    :",  type, "\n")
     

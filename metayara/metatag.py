@@ -372,10 +372,10 @@ _MACHO_HEADER_64 = [('Magic;',               0,   ctypes.c_uint32,      'L'),
                     ('Reserved;',            28,   ctypes.c_uint32,     'L'),]
 
 
-_MACHO_HEADER_64_INFO = [('Magic;', 0xfeedfacf,       'Magic 64'),
-                         ('Magic;', 0xcffaedfe,       'CIGAM 64'),
-                         ('Magic;', 0xfeedface,       'CIGAM 64'),
-                         ('Magic;', 0xcefaedfe,       'CIGAM 64'),
+_MACHO_HEADER_64_INFO = [('Magic;', 0xfeedfacf,       'MachO Magic 64'),
+                         ('Magic;', 0xcffaedfe,       'MachO CIGAM 64'),
+                         ('Magic;', 0xfeedface,       'MachO CIGAM 64'),
+                         ('Magic;', 0xcefaedfe,       'MachO CIGAM 64'),
                          ('Filetype;', 0x1,       'Object'),
                          ('Filetype;', 0x2,       'Execute'),
                          ('Filetype;', 0x3,       'VM shared lib'),

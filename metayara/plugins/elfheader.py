@@ -25,8 +25,8 @@ class elfheader():
                 if hexvalue == hex(item[1]):
                     return item[2]        
                 
-        optional = '.'
-        return optional
+        optionalempty = '.'
+        return optionalempty
         
     def set_field_header(self):
         """

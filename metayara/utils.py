@@ -5,10 +5,41 @@ import re
 def get_type(filename):
     """
     Get file mimetype
-    """
+    """    
     type = mimetypes.guess_type(filename)
     return type
 
+
+def get_filetype(filename):
+    """
+    Return filetype
+    """
+    handle = open(filename, mode='rb')
+    type = check_pe(handle)
+    if type is True:
+        return '32 Bit PE'
+    else:
+        type = check_elf(handle)
+        if type is True:
+            version = get_elf_bitversion(handle)
+            version = str(version) + ' Bit ELF'
+            return version
+        else:
+            type = check_macho(handle)
+            return type
+            
+            
+def check_macho(handle):
+    from metayara.metatag import _MACHO_HEADER_64_INFO
+    handle.seek(0, 0)
+    macho = handle.read(4)
+    macho = struct.unpack("<L", macho)[0]
+    macho = hex(macho)
+    
+    for item in _MACHO_HEADER_64_INFO:
+        if macho == hex(item[1]):
+            return item[2]
+        
 def coff_imagebase(handle):
     """
     Returns Imagebase
@@ -26,6 +57,18 @@ def coff_elfanew(handle):
     byte = handle.read(4)
     header_offset=struct.unpack("<L", byte)[0]
     return header_offset
+
+def check_elf(handle):
+    handle.seek(0, 0)
+    elf = handle.read(4)
+    type = struct.unpack("<BBBB", elf)
+    if hex(type[0]) == '0x7f':
+            if hex(type[1]) == '0x45':
+                if hex(type[2]) == '0x4c':
+                    if hex(type[3]) == '0x46':
+                        return True
+    else:
+        return False
 
 def check_pe(handle):
     """

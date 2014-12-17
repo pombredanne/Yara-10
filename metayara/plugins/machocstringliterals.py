@@ -13,14 +13,10 @@ class machocstringliterals():
         self.set_field_header()
         self.get_MachO_CstringOffset(handle)
         
-    #CSTRING LITERAL -> SECTION64-> _cstring
-    
     
     def set_field_header(self):
         setup = ("CstringSize", "CstringIndex")
-        
         self.MachO_Cstring_list.append(setup)
-        
         
         
     def get_MachO_CstringOffset(self, handle):
@@ -65,7 +61,6 @@ class machocstringliterals():
                             if item != 0:
                                 section+=chr(item)
                                 
-                        
                         if section == '__cstring':
                             handle.seek(start_offset+112)
                             cStringTblSize = handle.read(8)
@@ -96,15 +91,10 @@ class machocstringliterals():
                                         data = chr(item)
                                         data = data.lstrip()
                                         data = data.rstrip()
-                                        
                                         value+=data
-                                    
-                                        
-                                        
                                     
                                 localcounter+=1
                         
                         start_offset+=SectionSize
-                        
                         
             start_offset+=cmdsize
