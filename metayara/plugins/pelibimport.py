@@ -104,7 +104,7 @@ class pelibimport():
                 if field == str('Name;'):
                     if additional_bytes > 0:
                         seek+=additional_bytes
-                    byte, realoffset = utils.multiple_byte_handler(self.handle, seek, (8 *ctypes.sizeof(read)))
+                    byte, realoffset = utils.multiple_byte_handler_pe(self.handle, seek, (8 *ctypes.sizeof(read)))
                     sectionname = struct.unpack(pack, byte)
                     realoffset = int(realoffset)
                     """
