@@ -23,7 +23,8 @@ class pelibimport():
         """
         Set Field header
         """
-        setup = ("Offset", "Size of Offset", "LibraryName", "Value")
+        lib_size = 0
+        setup = ("Offset", "StringSize", "LibraryName", "Value")
         self.Lib_List.append(setup)
         imagebase = self.get_imagebase()
         virtualaddress, rawaddress = self.find_import_section()
@@ -33,10 +34,11 @@ class pelibimport():
         while True:
             if add_bytes == 0:
                pass  
+        
             self.handle.seek(rawaddress+12+add_bytes, 0)
             data = self.handle.read(4)
             data = struct.unpack("<L", data)[0]
-                
+            
             d = int(data)
             """
             If section is not filled with 0 bytes
@@ -45,9 +47,10 @@ class pelibimport():
                 nextseek= (virtbase - d)
                 finalseek= (imagebase - nextseek)
                 finalseekoffset= (rawaddress + finalseek)
-                   
+                
                 self.handle.seek(finalseekoffset, 0)
                 x = 1
+                
                 section = str()
                 while True:
                     data = self.handle.read(x)
@@ -58,8 +61,52 @@ class pelibimport():
                     else:
                         section+=chr(data)
                 
-                insert = (hex(finalseekoffset), len(section), section.lower())
+                insert = (hex(finalseekoffset), len(section), section.lower(), "")
                 self.Lib_List.append(insert)
+                
+                
+                # VINDEN VAN IMPORT TBL - PROTOTYPE - vervang oude
+                t1 = virtbase - 61440
+                t2 = imagebase - t1
+                t3 = rawaddress + t2
+                
+                
+                sym_size = 0
+                while True:
+                    self.handle.seek(rawaddress+16+lib_size , 0) #BASE VAN LIBRARY - GROTE IS 20 - AANTAL LIBRARYS LOOP
+                    data = self.handle.read(4)
+                    data = struct.unpack("<L", data)[0]
+                    trunkRVA = virtbase - int(data)
+                    trunkRVA = imagebase - trunkRVA
+                    trunkRVA = rawaddress + trunkRVA
+                    SymStringRva = trunkRVA
+                    
+                    self.handle.seek(int(trunkRVA+sym_size), 0) #SymbolAddres - GROTE IS 4
+                    trunkRVA = self.handle.read(4)
+                    trunkRVA = struct.unpack("<L", trunkRVA)[0]
+                    
+                    if hex(trunkRVA) == '0x0':
+                        lib_size+=20
+                        break
+                    
+                    SymTblRVA = virtbase - int(trunkRVA)
+                    SymTblRVA = imagebase - SymTblRVA
+                    SymTblRVA = rawaddress + SymTblRVA +2    
+                    sym_size+=4
+                
+                    self.handle.seek(SymTblRVA, 0)
+                    x = 1
+                    section = str()
+                    while True:
+                        data = self.handle.read(x)
+                        data = struct.unpack("<B", data)[0]
+                        
+                        if data == 0:
+                            break
+                        else:
+                            section+=chr(data)
+                    insert = (hex(finalseekoffset), len(section), "", section.lower())
+                    self.Lib_List.append(insert)
                 
             else:
                 break
@@ -82,8 +129,16 @@ class pelibimport():
         realoffset = (offset+seek)
         handle.seek(realoffset)
         byte = handle.read(read)
-        return byte, realoffset    
-    
+        return byte, realoffset   
+     
+    def get_import_table_rva(self, handle):
+        offset = offset = utils.coff_elfanew(handle)
+        imagebase = self.get_imagebase()
+        handle.seek(offset+24+0x68)
+        virtadd = handle.read(4)
+        virtadd = struct.unpack("<L", virtadd)[0]
+        print(hex(virtadd))
+         
     def find_import_section(self):
         """
         Retrieve section information form PE
@@ -117,6 +172,7 @@ class pelibimport():
                             section+=chr(char)
                     """
                     Assume import lib resorts in .idata section
+                    Edit this to dynamic search
                     """
                     if section == ".idata":
                         virtadd = realoffset+12
@@ -128,4 +184,5 @@ class pelibimport():
                         self.handle.seek(rawadd, 0)
                         rawdata = self.handle.read(ctypes.sizeof(ctypes.c_uint32))
                         rawdata = struct.unpack("<L", rawdata)[0]
+                        
                         return virtdata, rawdata
