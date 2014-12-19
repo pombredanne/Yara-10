@@ -27,8 +27,10 @@ class pelibimport():
         setup = ("Offset", "StringSize", "LibraryName", "Value")
         self.Lib_List.append(setup)
         imagebase = self.get_imagebase()
-        virtualaddress, rawaddress = self.find_import_section()
-        virtbase = virtualaddress + imagebase
+        SymtblOffset, rawaddress, virtualaddress = self.find_import_section()
+        Additional_SymOffset = SymtblOffset - virtualaddress
+        
+        virtbase = SymtblOffset + imagebase
         add_bytes = 0
  
         while True:
@@ -137,13 +139,15 @@ class pelibimport():
         handle.seek(offset+24+0x68)
         virtadd = handle.read(4)
         virtadd = struct.unpack("<L", virtadd)[0]
-        print(hex(virtadd))
+        return virtadd
          
     def find_import_section(self):
         """
         Retrieve section information form PE
         """
         offset = offset = utils.coff_elfanew(self.handle)
+        sym_offset = self.get_import_table_rva(self.handle)
+        
         self.handle.seek(offset+0x06, 0)
         byte = self.handle.read(0x02)
         sectionheader_size = 40
@@ -155,34 +159,21 @@ class pelibimport():
             if x> 0:
                 additional_bytes+= sectionheader_size
                 
-            for field, seek, read, pack in _SECTION_HEADER:
-                if field == str('Name;'):
+            for field, seek, read, pack in _SECTION_HEADER: 
+                if field == str('VirtualAddress;'):
+                    
                     if additional_bytes > 0:
                         seek+=additional_bytes
-                    byte, realoffset = utils.multiple_byte_handler_pe(self.handle, seek, (8 *ctypes.sizeof(read)))
-                    sectionname = struct.unpack(pack, byte)
-                    realoffset = int(realoffset)
-                    """
-                    Convert int to ASCII
-                    """ 
-                    section = str()
+                        
+                    byte, realoffset = utils.multiple_byte_handler_pe(self.handle, seek, (ctypes.sizeof(read)))
+                    sectionAdddres = struct.unpack(pack, byte)[0]
                     
-                    for char in byte:
-                        if char>0:
-                            section+=chr(char)
-                    """
-                    Assume import lib resorts in .idata section
-                    Edit this to dynamic search
-                    """
-                    if section == ".idata":
-                        virtadd = realoffset+12
-                        self.handle.seek(virtadd, 0)
-                        virtdata = self.handle.read(ctypes.sizeof(ctypes.c_uint32))
-                        virtdata = struct.unpack("<L", virtdata)[0]
-                        
-                        rawadd = realoffset+20
-                        self.handle.seek(rawadd, 0)
-                        rawdata = self.handle.read(ctypes.sizeof(ctypes.c_uint32))
-                        rawdata = struct.unpack("<L", rawdata)[0]
-                        
-                        return virtdata, rawdata
+                    byte, realoffset = utils.multiple_byte_handler_pe(self.handle, seek+40, (ctypes.sizeof(read)))
+                    sectionNext = struct.unpack(pack, byte)[0]
+                                  
+                    if sectionAdddres <= sectionNext > sym_offset:
+                        rawaddres, realoffset = utils.multiple_byte_handler_pe(self.handle, seek+8, (ctypes.sizeof(read)))  
+                        rawaddres = struct.unpack("<L", rawaddres)[0]
+                        virtadd, realoffset = utils.multiple_byte_handler_pe(self.handle, seek, (ctypes.sizeof(read)))  
+                        virtadd = struct.unpack("<L", virtadd)[0]
+                        return sym_offset, rawaddres, virtadd
