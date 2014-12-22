@@ -27,8 +27,12 @@ class pelibimport():
         setup = ("Offset", "StringSize", "LibraryName", "Value")
         self.Lib_List.append(setup)
         imagebase = self.get_imagebase()
-        SymtblOffset, rawaddress, virtualaddress = self.find_import_section()
-        Additional_SymOffset = SymtblOffset - virtualaddress
+        SymtblOffset, rawaddress, virtadd = self.find_import_section()
+        
+        a = SymtblOffset - virtadd
+        
+       
+        
         
         virtbase = SymtblOffset + imagebase
         add_bytes = 0
