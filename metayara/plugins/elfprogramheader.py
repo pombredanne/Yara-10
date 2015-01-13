@@ -3,6 +3,8 @@ import struct
 import ctypes
 from _struct import pack
 from metayara import utils
+import sys
+
 
 class elfprogramheader():
     """
@@ -12,10 +14,16 @@ class elfprogramheader():
     def __init__(self, handle, ELF_list):
         self.handle = handle
         self.ELF_list = ELF_list
-        #self.is_elf(handle)
+        self.is_elf(handle)
         self.set_field_header()
         self.elf_programheader()
         
+        
+    def is_elf(self, handle):
+        check = utils.check_elf(handle)
+        if check is False:
+            sys.exit("The image does not contain ELF header information") 
+            
     def set_field_header(self):
         """
         Set header list

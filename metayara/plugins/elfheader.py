@@ -2,6 +2,7 @@ from metayara.metatag import _ELF_SECTION_HEADER, _SECTION_HEADER_INFO
 import ctypes
 from metayara import utils
 import struct
+import sys
 
 class elfheader():
     """
@@ -12,9 +13,14 @@ class elfheader():
     def __init__(self, handle, ELF_list):
         self.handle = handle
         self.ELF_list = ELF_list
-        #self.is_elf(handle)
+        self.is_elf(handle)
         self.set_field_header()
         self.elf_file(handle)
+     
+    def is_elf(self, handle):
+        check = utils.check_elf(handle)
+        if check is False:
+            sys.exit("The image does not contain ELF header information") 
         
     def check_tags(self, field, hexvalue):
         """

@@ -2,6 +2,7 @@ from metayara import utils
 import ctypes
 import struct
 import re
+import sys
 
 class machocstringliterals():
     """
@@ -10,10 +11,16 @@ class machocstringliterals():
     def __init__(self, handle, MachO_Cstring_list):
         self.handle = handle
         self.MachO_Cstring_list = MachO_Cstring_list
+        self.is_MachO(handle)
         self.set_field_header()
         self.get_MachO_CstringOffset(handle)
         
-    
+    def is_MachO(self, handle):
+        check = utils.check_macho_version(handle, True)
+        
+        if check is False:
+            sys.exit("The image does not contain MachO header information") 
+            
     def set_field_header(self):
         setup = ("CstringSize", "CstringIndex")
         self.MachO_Cstring_list.append(setup)

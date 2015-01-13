@@ -11,9 +11,15 @@ class elfsection():
     def __init__(self, handle, ELF_Section):
         self.handle = handle
         self.ELF_Section = ELF_Section
+        self.is_elf(handle)
         self.set_field_header()
         self.elf_section()
         
+        
+    def is_elf(self, handle):
+        check = utils.check_elf(handle)
+        if check is False:
+            sys.exit("The image does not contain ELF header information")     
         
     def elf_section(self):
         """

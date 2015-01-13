@@ -3,6 +3,7 @@ from metayara.metatag import _SECTION_HEADER
 import ctypes
 import encodings
 from metayara import utils
+import sys
 
 class pelibimport():
     """
@@ -28,12 +29,7 @@ class pelibimport():
         self.Lib_List.append(setup)
         imagebase = self.get_imagebase()
         SymtblOffset, rawaddress, virtadd = self.find_import_section()
-        
-        a = SymtblOffset - virtadd
-        
-       
-        
-        
+         
         virtbase = SymtblOffset + imagebase
         add_bytes = 0
  
@@ -72,10 +68,11 @@ class pelibimport():
                 
                 
                 # VINDEN VAN IMPORT TBL - PROTOTYPE - vervang oude
+                """
                 t1 = virtbase - 61440
                 t2 = imagebase - t1
                 t3 = rawaddress + t2
-                
+                """
                 
                 sym_size = 0
                 while True:

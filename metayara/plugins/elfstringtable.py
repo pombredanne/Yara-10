@@ -2,6 +2,7 @@ from metayara import utils
 import struct
 from metayara.metatag import _ELF_SECTIONHEADER, _ELF_SECTIONHEADER_64
 import ctypes
+import sys
 
 class elfstringtable():
     """
@@ -10,9 +11,16 @@ class elfstringtable():
     def __init__(self, handle, ELF_stringtable):
         self.handle = handle
         self.ELF_stringtable = ELF_stringtable
+        self.is_elf(handle)
         self.set_field_header()
         self.elf_stringtable()
-        
+      
+      
+    def is_elf(self, handle):
+        check = utils.check_elf(handle)
+        if check is False:
+            sys.exit("The image does not contain ELF header information")  
+            
     def set_field_header(self):
         """
         Set Field header

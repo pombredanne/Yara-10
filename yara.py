@@ -64,10 +64,18 @@ def Output_data(container):
     header_field = []
     for field in data[0:length_container_header]:
         header_field.append(field)
-          
+    
+    
+        
+    container_lenght_list_first = container_lenght_list[0]
+    
+    header = ' '.join('{:<%s}' %l for l in container_lenght_list)
+    
     fmt = ' '.join('{:<%s}' %l for l in container_lenght_list)
     
-    print(fmt.format(*container[0]))  #Header
+    
+    
+    print(header.format(*container[0]))  #Header
     print('-' * (sum(container_lenght_list) + len(container_lenght_list))) #HeaderDivider
     for argv in container[1:]: #Body
         print(fmt.format(*argv))
@@ -78,15 +86,13 @@ def Process(cmd, filename):
     Execute commands from parser option
     """
     print("Executing command:", cmd, "\n")
-    
-    
+    if not os.path.exists(pluginpath + cmd + '.py'):
+        sys.exit("Plugin not found")
     type = utils.get_filetype(filename)
     
-    
     print("Reading file:", filename)
-    print("MIMEtype    :",  type, "\n")
+    print("FILEtype    :",  type, "\n")
     
-
     """
     Open IO File buffer
     """
@@ -101,14 +107,17 @@ def Process(cmd, filename):
             setdir = (pluginpath + name)
     
     container = []
+    
     loader = importlib.machinery.SourceFileLoader(cmd, setdir)
     foo = loader.load_module()
+    
     obj = getattr(foo, cmd)
     data = obj(handle, container)
     
     if len(container) <= 0:
         sys.stderr.write("Container Empty")
         sys.exit()
+        
     else:
         Output_data(container)
         
@@ -130,6 +139,9 @@ def main():
     """
     Print Plugin info if called, otherwise execute command
     """
+    
+    if opts.command is None:
+        sys.exit("No command found")
     if opts.pluginlist:
         
         plugins = plugin_description()
@@ -137,7 +149,8 @@ def main():
         
         for value in plugins:
             print("{0:<{1}} - {2}".format(value, maxsize, plugins[value]))
-  
+    
+    
     else:                
         if opts.filename is not None:
             if not os.path.exists(opts.filename):

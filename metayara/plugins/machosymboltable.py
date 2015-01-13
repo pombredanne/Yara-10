@@ -1,6 +1,7 @@
 from metayara import utils
 import struct
 import ctypes
+import sys
 from metayara.metatag import _MACHO_SYMTAB_STRUCT
 from metayara.metatag import _MACHO_DESCPITION_FLAGS
 
@@ -13,9 +14,16 @@ class machosymboltable():
     def __init__(self, handle, MachO_SymTable_List):
         self.handle = handle
         self.MachO_SymTable_List = MachO_SymTable_List
+        self.is_MachO(handle)
         self.set_field_header()
         self.MachO_SymbolTable(handle)
+     
+    def is_MachO(self, handle):
+        check = utils.check_macho_version(handle, True)
         
+        if check is False:
+            sys.exit("The image does not contain MachO header information") 
+                
     def set_field_header(self):
         """
         Set header list
@@ -73,8 +81,7 @@ class machosymboltable():
                     
             clearline = (7 * ("",))
             self.MachO_SymTable_List.append(clearline)
-            stripeline = (7 * ("////--",))
-            self.MachO_SymTable_List.append(stripeline)
+            
             SymtblOffset+=16 #Size of SymbolTable Entries
     
     

@@ -12,6 +12,7 @@ from metayara.metatag import _MACHO_LC_LINKEDIT_DATA_COMMAND
 
 import struct
 import ctypes
+import sys
 
 
 class macholoadcommands():
@@ -22,11 +23,15 @@ class macholoadcommands():
     def __init__(self, handle, MachO_List):
         self.handle = handle
         self.MachO_List = MachO_List  
-        #self.is_MachO(handle)
+        self.is_MachO(handle)
         self.set_field_header()  
         self.MachO_LoadCommands(handle)
         
+    def is_MachO(self, handle):
+        check = utils.check_macho_version(handle, True)
         
+        if check is False:
+            sys.exit("The image does not contain MachO header information")     
         
     def set_field_header(self):
         """

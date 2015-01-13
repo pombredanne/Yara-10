@@ -3,7 +3,7 @@ from metayara import utils
 import ctypes
 import struct
 import re
-
+import sys
 
 class machoheader():
     """
@@ -12,10 +12,16 @@ class machoheader():
     def __init__(self, handle, MachO_List):
         self.handle = handle
         self.MachO_List = MachO_List
+        self.is_MachO(handle)
         self.set_field_header()
         self.macho_file_header()
         
+    def is_MachO(self, handle):
+        check = utils.check_macho_version(handle, True)
         
+        if check is False:
+            sys.exit("The image does not contain MachO header information") 
+               
     def set_field_header(self):
         """
         Set header list

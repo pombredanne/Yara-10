@@ -15,22 +15,22 @@ def get_filetype(filename):
     Return filetype
     """
     handle = open(filename, mode='rb')
-    type = check_pe(handle)
-    if type is True:
+    pe_type = check_pe(handle)
+    if pe_type is True:
         return '32 Bit PE'
     else:
-        type = check_elf(handle)
-        if type is True:
+        elf_type = check_elf(handle)
+        if elf_type is True:
             version = get_elf_bitversion(handle)
             version = str(version) + ' Bit ELF'
             return version
         else:
-            type = check_macho(handle)
-            return type
-            
-            
-def check_macho(handle):
+            macho_type = check_macho_version(handle)
+            return macho_type
+               
+def check_macho_version(handle, check=None):
     from metayara.metatag import _MACHO_HEADER_64_INFO
+    
     handle.seek(0, 0)
     macho = handle.read(4)
     macho = struct.unpack("<L", macho)[0]
@@ -38,7 +38,13 @@ def check_macho(handle):
     
     for item in _MACHO_HEADER_64_INFO:
         if macho == hex(item[1]):
-            return item[2]
+            if check is None:
+                return item[2]
+            else: 
+                return True
+            
+    if check is True:
+        return False
         
 def coff_imagebase(handle):
     """
