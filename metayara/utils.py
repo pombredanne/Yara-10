@@ -260,6 +260,10 @@ def get_elf_shtrtable_index(handle):
     data = struct.unpack((endian + "H"), data)[0]
     return data
 
+def get_elf_sthrtable_entry(handle):
+    index = get_elf_shtrtable_index(handle)
+    
+
 def get_endianess(handle):
     """
     Retrieve Endianess for ELF header

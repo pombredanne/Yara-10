@@ -326,8 +326,8 @@ _ELF_SECTIONHEADER = [ ('Name;',                0,   ctypes.c_uint32,   'L'),
                        ('Size;',                20,  ctypes.c_uint32,   'L'),
                        ('Link;',                24,  ctypes.c_uint32,   'L'),
                        ('Info;',                28,  ctypes.c_uint32,   'L'),
-                       ('Addralign;',           24,  ctypes.c_uint32,   'L'),
-                       ('Entsize;',             24,  ctypes.c_uint32,   'L'),]
+                       ('Addralign;',           32,  ctypes.c_uint32,   'L'),
+                       ('Entsize;',             36,  ctypes.c_uint32,   'L'),]
 
 _ELF_SECTIONHEADER_64 = [   ('Name;',                0,   ctypes.c_uint32,   'L'),
                             ('Type;',                4,   ctypes.c_uint32,   'L'),
@@ -340,6 +340,11 @@ _ELF_SECTIONHEADER_64 = [   ('Name;',                0,   ctypes.c_uint32,   'L'
                             ('Addralign;',           44,  ctypes.c_uint64,   'Q'),
                             ('Entsize;',             52,  ctypes.c_uint64,   'Q'),]
 
+_ELF_SECTION_FLAGS = [ ('WRITE',                    'W'), 
+                       ('ALLOC',                    'A'),
+                       ('EXECUTE',                  'E'),
+                       ('MASKPROC',                 'M'),
+                       ('STRINGS',                  'S')]
 
 _ELF_SECTION_HEADER_TYPE = [('NULL',        0),
                             ('GNU_HASH',    0x2),

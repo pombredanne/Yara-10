@@ -27,7 +27,7 @@ class elfheader():
         Check for tags in metatag.tag
         """
         for item in _SECTION_HEADER_INFO:
-            if field is item[0]:
+            if field == item[0]:
                 if hexvalue == hex(item[1]):
                     return item[2]        
                 
