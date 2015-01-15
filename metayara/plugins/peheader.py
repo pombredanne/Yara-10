@@ -1,6 +1,6 @@
 import struct
 from time import gmtime, strftime
-from metayara.metatag import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, tag_pe, _PE_Characteristics, _PE_DDLCharacteristics
+from metayara.metatag import _IMAGE_FILE_HEADER, _IMAGE_OPTIONAL_HEADER, tag_pe, _PE_Characteristics, _PE_DDLCharacteristics, _IMAGE_OPTIONAL_HEADER_64
 import ctypes, sys
 import importlib
 from metayara import utils
@@ -49,17 +49,12 @@ class peheader():
                 flag_name = flag_name
                 flag_description = flag_description
                 flag_set = "TRUE"
-            else:
+            
+            
+            
+                insert = (" ", " ", "FLAG", flag_name, flag_set, flag_description)
                 
-                flag_name, flag_description = flag_list[counter]
-                flag_name = flag_name
-                flag_description = flag_description
-                flag_set = "FALSE"
-            
-            
-            insert = (" ", " ", "FLAG", flag_name, flag_set, flag_description)
-            
-            self.PE_list.append(insert)
+                self.PE_list.append(insert)
             counter+=1
         self.PE_list.append(clearline)
         
@@ -86,6 +81,9 @@ class peheader():
         """
         retrieve PE header 
         """
+        
+        
+        
         for field, seek, read, pack in _IMAGE_FILE_HEADER:
             byte, realoffset = self.byte_handler_pe_file_header(self.handle, seek, ctypes.sizeof(read))
             intvalue = struct.unpack(pack, byte)[0]
@@ -104,9 +102,22 @@ class peheader():
         
     def pe_image_optional_header(self, field_list):
         """
-        Crossreference byte with information from metalist
+        Retrieve PE Optional header information
         """
-        for field, seek, read, pack in _IMAGE_OPTIONAL_HEADER:
+        
+        byte, realoffset = self.byte_handler_pe_file_optional_header(self.handle, 0, 2)
+        bit_version = struct.unpack("<H", byte)[0]
+        
+        
+        if hex(bit_version) == '0x20b':
+            
+            _OPTIONAL_HEADER = _IMAGE_OPTIONAL_HEADER_64
+        
+        if hex(bit_version) == '0x10b':
+            _OPTIONAL_HEADER = _IMAGE_OPTIONAL_HEADER
+        
+        
+        for field, seek, read, pack in _OPTIONAL_HEADER:
             byte, realoffset = self.byte_handler_pe_file_optional_header(self.handle, seek, ctypes.sizeof(read))
             intvalue = struct.unpack(pack, byte)[0]
             hexvalue = hex(intvalue)
@@ -133,13 +144,13 @@ class peheader():
         """
         Module for byte handling pe file optional header
         """
-        offset = self.set_optinal_header_offset(handle)
+        offset = self.set_optional_header_offset(handle)
         handle.seek(offset+seek)
         realoffset = (offset+seek)
         byte = handle.read(read)
         return byte, realoffset
     
-    def set_optinal_header_offset(self, handle):
+    def set_optional_header_offset(self, handle):
         """
         returns integer for pe file optinal header offset
         """

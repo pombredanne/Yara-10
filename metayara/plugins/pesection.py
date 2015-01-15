@@ -110,8 +110,19 @@ class pesection():
         """
         Byte handling for PE section offset
         """
-        elafnew = offset = utils.coff_elfanew(handle)
-        secion_header_offset = 0xf8
+        elafnew = utils.coff_elfanew(handle)
+        handle.seek(elafnew+24 ,0)
+        bit_version = handle.read(2)
+        bit_version = struct.unpack("<H", bit_version)[0]
+        
+        if hex(bit_version) == '0x10b':
+            secion_header_offset = 0xf8
+        elif hex(bit_version) == '0x20b':
+            secion_header_offset = 0x108
+        else:
+            sys.exit("Missing data in Header")
+            
+       
         sectionoffset = (elafnew+secion_header_offset+seek)
         handle.seek(sectionoffset, 0)
         byte = handle.read(read)
