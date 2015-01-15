@@ -88,7 +88,7 @@ def Process(cmd, filename):
     print("Executing command:", cmd, "\n")
     if not os.path.exists(pluginpath + cmd + '.py'):
         sys.exit("Plugin not found")
-    type = utils.get_filetype(filename)
+    type = utils.get_type(filename)
     
     print("Reading file:", filename)
     print("FILEtype    :",  type, "\n")

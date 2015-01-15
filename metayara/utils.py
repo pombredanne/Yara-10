@@ -1,12 +1,13 @@
 import mimetypes 
 import struct
 import re
+from magic import magic
 
 def get_type(filename):
     """
     Get file mimetype
     """    
-    type = mimetypes.guess_type(filename)
+    type = magic.from_file(filename)
     return type
 
 
