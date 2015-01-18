@@ -76,25 +76,32 @@ class pelibimport():
             
             symbol_size = 0
             while True:
+                
+                flag = False
                 handle.seek(firstTrunk_offset+symbol_size , 0)
                 firstTrunk_RVA = handle.read(4)
                 firstTrunk_RVA = struct.unpack("<L", firstTrunk_RVA)[0]
+                
+                
+                
+                firstTrunk_RVA_Offset = firstTrunk_RVA - virtadd
+                firstTrunk_RVA_Offset+=rawaddres
+                
+                
+                
+                if firstTrunk_RVA_Offset >= max_offset:
+                    flag = True
+                    firstTrunk_RVA_Offset = firstTrunk_offset-2+symbol_size
                 
                 if firstTrunk_RVA == 0:
                     break
                 else:
                     symbol_size+=4
                 
-                firstTrunk_RVA_Offset = firstTrunk_RVA - virtadd
-                firstTrunk_RVA_Offset+=rawaddres
-                
-                
-                if firstTrunk_RVA_Offset >= max_offset:
-                    firstTrunk_RVA_Offset = 0
-                
                 symbol = str()
                 if firstTrunk_RVA_Offset != 0:
                     handle.seek(firstTrunk_RVA_Offset+2, 0)
+                    
                     while True:
                         local_symbol = handle.read(1)
                         local_symbol = struct.unpack("<B", local_symbol)[0]
@@ -104,11 +111,13 @@ class pelibimport():
                             break
                         
                         else:
-                            symbol+=chr(local_symbol)
-              
-                if symbol == "":
-                    symbol="-"
-                symbol_table = (hex(firstTrunk_RVA_Offset), len(symbol),"",symbol)       
+                            if flag is True:
+                                symbol+=str(local_symbol)
+                            else: 
+                                symbol+=chr(local_symbol)
+                            
+                
+                symbol_table = (firstTrunk_RVA_Offset, len(symbol),"",symbol)       
                 self.Lib_List.append(symbol_table)
             
             if lib_string_offset == 0:
