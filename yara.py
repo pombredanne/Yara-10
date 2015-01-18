@@ -88,13 +88,13 @@ def Process(cmd, filename):
     print("Executing command:", cmd, "\n")
     if not os.path.exists(pluginpath + cmd + '.py'):
         sys.exit("Plugin not found")
-    type = utils.get_type(filename)
+    type = utils.get_filetype(filename)
     
     print("Reading file:", filename)
     print("FILEtype    :",  type, "\n")
     
     """
-    Open IO File buffer
+    Open IO File buffer Binary mode
     """
     try:
         handle = open(filename, 'rb')
@@ -134,7 +134,6 @@ def main():
                       help='show available plugins', )
     parser.add_option("-c", "--command", dest="command", action='store', type="string", 
                       help='execute command')
-    
     opts, args = parser.parse_args()    
     """
     Print Plugin info if called, otherwise execute command
@@ -149,7 +148,6 @@ def main():
         
         for value in plugins:
             print("{0:<{1}} - {2}".format(value, maxsize, plugins[value]))
-    
     
     else:                
         if opts.filename is not None:

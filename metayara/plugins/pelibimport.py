@@ -4,6 +4,7 @@ import ctypes
 import encodings
 from metayara import utils
 import sys
+from test.test_email.test_message import first
 
 class pelibimport():
     """
@@ -13,109 +14,110 @@ class pelibimport():
         self.handle = handle
         self.Lib_List = Lib_List
         self.is_pe(handle)
-        self.libimports()
+        self.libimports(handle)
     
     def is_pe(self, handle):
         check = utils.check_pe(handle)
         if check is False:
             sys.exit("The image is not Portable Executable")
         
-    def libimports(self):
+    def libimports(self, handle):
         """
         Set Field header
         """
-        lib_size = 0
+
         setup = ("Offset", "StringSize", "LibraryName", "Value")
         self.Lib_List.append(setup)
-        imagebase = self.get_imagebase()
-        SymtblOffset, rawaddress, virtadd = self.find_import_section()
-         
-        virtbase = SymtblOffset + imagebase
-        add_bytes = 0
- 
-        while True:
-            if add_bytes == 0:
-               pass  
         
-            self.handle.seek(rawaddress+12+add_bytes, 0)
-            data = self.handle.read(4)
-            data = struct.unpack("<L", data)[0]
+        sym_offset, sym_offset_size, virtadd, rawaddres = self.find_import_section(handle)
+        
+        max_offset = rawaddres+sym_offset_size
+        
+        raw_search = rawaddres + (sym_offset - virtadd)
+        
+        lib_offset_size = 0
+        while True:
+            handle.seek(raw_search+12+lib_offset_size , 0) #BASE VAN LIBRARY - GROTE IS 20 - AANTAL LIBRARYS LOOP
+            lib_string_offset = handle.read(4)
+            lib_string_offset = struct.unpack("<L", lib_string_offset)[0]
             
-            d = int(data)
-            """
-            If section is not filled with 0 bytes
-            """
-            if d != 0:
-                nextseek= (virtbase - d)
-                finalseek= (imagebase - nextseek)
-                finalseekoffset= (rawaddress + finalseek)
-                
-                self.handle.seek(finalseekoffset, 0)
-                x = 1
-                
-                section = str()
-                while True:
-                    data = self.handle.read(x)
-                    data = struct.unpack("B", data)[0]
-                    
-                    if data == 0:
-                        break
-                    else:
-                        section+=chr(data)
-                
-                insert = (hex(finalseekoffset), len(section), section.lower(), "")
-                self.Lib_List.append(insert)
-                
-                
-                # VINDEN VAN IMPORT TBL - PROTOTYPE - vervang oude
-                """
-                t1 = virtbase - 61440
-                t2 = imagebase - t1
-                t3 = rawaddress + t2
-                """
-                
-                sym_size = 0
-                while True:
-                    self.handle.seek(rawaddress+16+lib_size , 0) #BASE VAN LIBRARY - GROTE IS 20 - AANTAL LIBRARYS LOOP
-                    data = self.handle.read(4)
-                    data = struct.unpack("<L", data)[0]
-                    trunkRVA = virtbase - int(data)
-                    trunkRVA = imagebase - trunkRVA
-                    trunkRVA = rawaddress + trunkRVA
-                    SymStringRva = trunkRVA
-                    
-                    self.handle.seek(int(trunkRVA+sym_size), 0) #SymbolAddres - GROTE IS 4
-                    trunkRVA = self.handle.read(4)
-                    trunkRVA = struct.unpack("<L", trunkRVA)[0]
-                    
-                    if hex(trunkRVA) == '0x0':
-                        lib_size+=20
-                        break
-                    
-                    SymTblRVA = virtbase - int(trunkRVA)
-                    SymTblRVA = imagebase - SymTblRVA
-                    SymTblRVA = rawaddress + SymTblRVA +2    
-                    sym_size+=4
-                
-                    self.handle.seek(SymTblRVA, 0)
-                    x = 1
-                    section = str()
-                    while True:
-                        data = self.handle.read(x)
-                        data = struct.unpack("<B", data)[0]
-                        
-                        if data == 0:
-                            break
-                        else:
-                            section+=chr(data)
-                    insert = (hex(finalseekoffset), len(section), "", section.lower())
-                    self.Lib_List.append(insert)
-                
-            else:
+            if lib_string_offset == 0:
                 break
-            add_bytes+=20
-             
-    def get_imagebase(self):
+           
+            """Library String"""
+            string_offset = lib_string_offset - virtadd
+            string_offset+=rawaddres
+            
+            handle.seek(string_offset, 0)
+            library = str()
+            
+            lib_size = 0
+            while True:
+                    local_data = handle.read(1)
+                    local_data = struct.unpack("<B", local_data)[0]
+                    
+                    if local_data == 0:
+                        
+                        break
+                    
+                    else:
+                        library+=chr(local_data)
+                
+            insert = (hex(string_offset), len(library), library, "")       
+            self.Lib_List.append(insert)
+            
+            
+            handle.seek(raw_search+16+lib_offset_size , 0) #BASE VAN LIBRARY - GROTE IS 20 - AANTAL LIBRARYS LOOP
+            firstTrunk = handle.read(4)
+            firstTrunk = struct.unpack("<L", firstTrunk)[0]
+            
+            firstTrunk_offset = firstTrunk - virtadd
+            firstTrunk_offset+=rawaddres
+            
+            symbol_size = 0
+            while True:
+                handle.seek(firstTrunk_offset+symbol_size , 0)
+                firstTrunk_RVA = handle.read(4)
+                firstTrunk_RVA = struct.unpack("<L", firstTrunk_RVA)[0]
+                
+                if firstTrunk_RVA == 0:
+                    break
+                else:
+                    symbol_size+=4
+                
+                firstTrunk_RVA_Offset = firstTrunk_RVA - virtadd
+                firstTrunk_RVA_Offset+=rawaddres
+                
+                
+                if firstTrunk_RVA_Offset >= max_offset:
+                    firstTrunk_RVA_Offset = 0
+                
+                symbol = str()
+                if firstTrunk_RVA_Offset != 0:
+                    handle.seek(firstTrunk_RVA_Offset+2, 0)
+                    while True:
+                        local_symbol = handle.read(1)
+                        local_symbol = struct.unpack("<B", local_symbol)[0]
+                        
+                        if local_symbol == 0:
+                            
+                            break
+                        
+                        else:
+                            symbol+=chr(local_symbol)
+              
+                if symbol == "":
+                    symbol="-"
+                symbol_table = (hex(firstTrunk_RVA_Offset), len(symbol),"",symbol)       
+                self.Lib_List.append(symbol_table)
+            
+            if lib_string_offset == 0:
+                break
+            else:
+                 lib_offset_size+=20
+                 
+                
+    def get_imagebase(self, handle):
         """
         returns imagebase offset from PE
         """
@@ -134,23 +136,22 @@ class pelibimport():
         byte = handle.read(read)
         return byte, realoffset   
      
-    def get_import_table_rva(self, handle):
-        offset = offset = utils.coff_elfanew(handle)
-        imagebase = self.get_imagebase()
-        handle.seek(offset+24+0x68)
-        virtadd = handle.read(4)
-        virtadd = struct.unpack("<L", virtadd)[0]
-        return virtadd
-         
-    def find_import_section(self):
+
+    def find_import_section(self, handle):
         """
         Retrieve section information form PE
         """
-        offset = offset = utils.coff_elfanew(self.handle)
-        sym_offset = self.get_import_table_rva(self.handle)
+        elfanew = utils.coff_elfanew(handle)
+        handle.seek(elfanew+24+104, 0)
+        sym_offset = handle.read(4)
+        sym_offset = struct.unpack("<L", sym_offset)[0]
         
-        self.handle.seek(offset+0x06, 0)
-        byte = self.handle.read(0x02)
+        handle.seek(elfanew+24+108, 0)
+        sym_offset_size = handle.read(4)
+        sym_offset_size = struct.unpack("<L", sym_offset_size)[0]
+        
+        handle.seek(elfanew+0x06, 0)
+        byte = handle.read(0x02)
         sectionheader_size = 40
         Sectionnumbers = struct.unpack("<H", byte)[0]
         
@@ -175,6 +176,11 @@ class pelibimport():
                     if sectionAdddres <= sectionNext > sym_offset:
                         rawaddres, realoffset = utils.multiple_byte_handler_pe(self.handle, seek+8, (ctypes.sizeof(read)))  
                         rawaddres = struct.unpack("<L", rawaddres)[0]
+                        
+                        rawaddres_size, realoffset = utils.multiple_byte_handler_pe(self.handle, seek+4, (ctypes.sizeof(read)))  
+                        rawaddres_size = struct.unpack("<L", rawaddres_size)[0]
+                        
                         virtadd, realoffset = utils.multiple_byte_handler_pe(self.handle, seek, (ctypes.sizeof(read)))  
                         virtadd = struct.unpack("<L", virtadd)[0]
-                        return sym_offset, rawaddres, virtadd
+                        print
+                        return sym_offset, rawaddres_size, virtadd, rawaddres
