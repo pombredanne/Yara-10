@@ -1,6 +1,6 @@
 import struct
 from metayara.metatag import _SECTION_HEADER
-from metayara.functionslist import _WS2_32_dll
+from metayara.functionslist import _WS2_32_dll, _WSOCK32_DLL, _OLEAUT32_dll
 import ctypes
 import encodings
 from metayara import utils
@@ -115,12 +115,27 @@ class pelibimport():
                         
                         else:
                             if flag is True:
-                                if active_lib == 'WS2_32.dll':
+                                        
+                                if active_lib.upper() == 'WSOCK32.DLL':
+                                    symbol+=str(local_symbol)
+                                    
+                                    for item in _WSOCK32_DLL:
+                                        if local_symbol is item[0]:
+                                            symbol+=(" (" + item[1] + ")")      
+                                           
+                                if active_lib.upper() == 'OLEAUT32.DLL':
+                                    symbol+=str(local_symbol)
+                                    
+                                    for item in _OLEAUT32_dll:
+                                        if local_symbol is item[0]:
+                                            symbol+=(" (" + item[1] + ")")   
+                                               
+                                if active_lib.upper() == 'WS2_32.DLL':
                                     symbol+=str(local_symbol)
                                     
                                     for item in _WS2_32_dll:
                                         if local_symbol is item[0]:
-                                            symbol+=(" (" + item[1] + ")")
+                                            symbol+=(" (" + item[1] + ")")     
                                     
                                 else:
                                     symbol+=str(local_symbol)
