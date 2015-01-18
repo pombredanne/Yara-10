@@ -1,5 +1,6 @@
 import struct
 from metayara.metatag import _SECTION_HEADER
+from metayara.functionslist import _WS2_32_dll
 import ctypes
 import encodings
 from metayara import utils
@@ -75,6 +76,8 @@ class pelibimport():
             firstTrunk_offset+=rawaddres
             
             symbol_size = 0
+            
+            active_lib = library
             while True:
                 
                 flag = False
@@ -112,7 +115,15 @@ class pelibimport():
                         
                         else:
                             if flag is True:
-                                symbol+=str(local_symbol)
+                                if active_lib == 'WS2_32.dll':
+                                    symbol+=str(local_symbol)
+                                    
+                                    for item in _WS2_32_dll:
+                                        if local_symbol is item[0]:
+                                            symbol+=(" (" + item[1] + ")")
+                                    
+                                else:
+                                    symbol+=str(local_symbol)
                             else: 
                                 symbol+=chr(local_symbol)
                             
