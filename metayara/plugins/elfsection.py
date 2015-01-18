@@ -23,14 +23,18 @@ class elfsection():
         if check is False:
             sys.exit("The image does not contain ELF header information")     
             
-    def set_char_flags(self, flag, flag_list):
+    def set_char_flags(self, intvalue, flag_list):
         """
         Returns Flags from search list
         """
         local_tbl = []
         local_string = str()
-        name, intvalue = flag
+        
+        if intvalue > 32:
+            return '-'
+        
         binary_value = ('{:05b}'.format(intvalue))
+        
         
         counter = 0
         for flag in reversed(binary_value):
@@ -98,8 +102,8 @@ class elfsection():
                             insert.append(item[0])
                 
                 elif name == 'Flags;':
-                    set_elfsec_flag = (name, integer)
-                    flag = self.set_char_flags(set_elfsec_flag, _ELF_SECTION_FLAGS)
+                    
+                    flag = self.set_char_flags(integer, _ELF_SECTION_FLAGS)
                     insert.append(flag)
                     
                 else:
